@@ -30,3 +30,19 @@
 *.exe
 *.out
 *.app
+
+# VIM
+*.swp
+
+# cmake
+Makefile
+CMakeCache.txt
+CMakeFiles
+cmake_install.cmake
+CTestTestfile.cmake
+
+# gtest
+Testing/
+
+# Binaries
+bin/
