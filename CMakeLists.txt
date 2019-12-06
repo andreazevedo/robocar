@@ -22,9 +22,15 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin)
 
 
 # LIBRARIES & EXECUTABLES #
+set(CONTROL_FILES
+  src/control/motor.cc
+  src/control/motor.h
+)
+add_library(control ${CONTROL_FILES})
+target_link_libraries(control pigpio)
 
 set(ROBOCAR_FILES
   src/main.cc
 )
 add_executable(robocar ${ROBOCAR_FILES})
-target_link_libraries(robocar pigpio)
+target_link_libraries(robocar control)

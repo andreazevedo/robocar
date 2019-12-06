@@ -43,8 +43,9 @@ typedef unsigned char uint8_t;
 #define MOTORDATA 15
 
 #define MOTOR_1_PWM 13
-//#define MOTOR_3_PWM 13
-//#define MOTOR_4_PWM  8
+#define MOTOR_2_PWM 22
+#define MOTOR_3_PWM 27
+#define MOTOR_4_PWM 17
 
 /*
    The only other connection needed between the Pi and the shield
@@ -188,24 +189,27 @@ int main(int argc, char *argv[]) {
   checkResult(gpioSetMode(MOTORDATA, PI_OUTPUT));
   checkResult(gpioSetMode(MOTORCLK, PI_OUTPUT));
 
-  checkResult(gpioSetMode(MOTOR_1_PWM, PI_OUTPUT));
+  checkResult(gpioSetMode(MOTOR_2_PWM, PI_OUTPUT));
 
-  checkResult(gpioPWM(MOTOR_1_PWM, 0));
+  checkResult(gpioPWM(MOTOR_2_PWM, 0));
 
   init();
 
   // Start motor
-  checkResult(gpioPWM(MOTOR_1_PWM, 255));
-  DCMotorRun(1, FORWARD);
+  DCMotorRun(2, FORWARD);
+  checkResult(gpioPWM(MOTOR_2_PWM, 255));
 
+  sleep(3);
+
+  checkResult(gpioPWM(MOTOR_2_PWM, 200));
   sleep(2);
 
-  checkResult(gpioPWM(MOTOR_1_PWM, 128));
+  checkResult(gpioPWM(MOTOR_2_PWM, 150));
   sleep(1);
 
   // Stop and release motor
-  DCMotorRun(1, RELEASE);
-  checkResult(gpioPWM(MOTOR_1_PWM, 0));
+  DCMotorRun(2, RELEASE);
+  checkResult(gpioPWM(MOTOR_2_PWM, 0));
 
   usleep(100 * 1000);
 
