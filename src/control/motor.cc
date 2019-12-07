@@ -108,17 +108,28 @@ Motor::Motor(uint8_t id) noexcept
     : id_{id},
       pwdPort_{getPwdPort(id)},
       stateBitA_{getStateBitA(id)},
-      stateBitB_{getStateBitB(id)} {}
-Motor::~Motor() noexcept {
+      stateBitB_{getStateBitB(id)} {
   init();
+}
+Motor::~Motor() noexcept {
+  setState(State::Release);
+  setSpeed(0);
 }
 
 void Motor::init() noexcept {
+  checkResult(gpioSetMode(kMotorLatch, PI_OUTPUT));
+  checkResult(gpioSetMode(kMotorEnable, PI_OUTPUT));
+  checkResult(gpioSetMode(kMotorData, PI_OUTPUT));
+  checkResult(gpioSetMode(kMotorClk, PI_OUTPUT));
+  checkResult(gpioSetMode(pwdPort_, PI_OUTPUT));
+  checkResult(gpioPWM(pwdPort_, 0));
+
   gLatchState &= ~getBit(stateBitA_) & ~getBit(stateBitB_);
-  latchTx();
+
+  applyState();
 }
 
-void Motor::setState(State newState) noexcept {
+void Motor::setState(State newState, bool apply) noexcept {
   state_ = newState;
   switch (newState) {
     case State::Forward:
@@ -136,14 +147,21 @@ void Motor::setState(State newState) noexcept {
     case State::Break:
       return;
   }
+
+  if (apply) {
+    Motor::applyState();
+  }
 }
 
-void Motor::setSpeed(uint8_t speed) noexcept { speed_ = speed; }
+void Motor::setSpeed(uint8_t speed) noexcept {
+  speed_ = speed;
+  checkResult(gpioPWM(pwdPort_, speed_));
+}
 
 /* static */
 uint8_t Motor::gLatchState = 0;
 /* static */
-void Motor::latchTx() noexcept {
+void Motor::applyState() noexcept {
   checkResult(gpioWrite(kMotorLatch, PI_LOW));
   checkResult(gpioWrite(kMotorData, PI_LOW));
 

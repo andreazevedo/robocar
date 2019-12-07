@@ -30,7 +30,11 @@ class Motor {
   Motor& operator=(Motor&&) = default;
 
   // Sets the state of the motor.
-  void setState(State newState) noexcept;
+  // @param newState  The new state.
+  // @param apply     Whether the state should be applied.
+  //                  If false, users have to either call applyState() manually,
+  //                  or change the state of another motor with apply=true.
+  void setState(State newState, bool apply = true) noexcept;
 
   // Sets the speed of the motor.
   // @param speed   Must be between 0 and 255.
@@ -65,7 +69,7 @@ class Motor {
   void init() noexcept;
 
   // Applies latch state to all motors!
-  static void latchTx() noexcept;
+  static void applyState() noexcept;
 };
 
 }  // namespace control
