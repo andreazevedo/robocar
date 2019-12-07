@@ -9,7 +9,11 @@ namespace control {
  * Service responsible for controlling the car.
  */
 class ControlService {
+ public:
   ControlService() noexcept;
+
+  void setState(Motor::State newState) noexcept;
+  void setSpeed(uint8_t speed) noexcept;
 
  private:
   Motor frontLeft_;
