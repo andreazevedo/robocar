@@ -23,8 +23,12 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin)
 
 # LIBRARIES & EXECUTABLES #
 set(CONTROL_FILES
+  src/control/control_service.cc
+  src/control/control_service.h
   src/control/motor.cc
   src/control/motor.h
+  src/control/util.cc
+  src/control/util.h
 )
 add_library(control ${CONTROL_FILES})
 target_link_libraries(control pigpio)

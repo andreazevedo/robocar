@@ -2,14 +2,13 @@
 #include <cstdio>
 #include <cstdlib>
 
-#include <pigpio.h>
-
 #include "control/motor.h"
+#include "control/util.h"
 
 using namespace robocar::control;
 
 int main(int argc, char *argv[]) {
-  if (gpioInitialise() < 0) return 1;
+  globalPigpioInitialize();
 
   {
     Motor motor(2 /* motor ID */);
@@ -22,6 +21,4 @@ int main(int argc, char *argv[]) {
     sleep(1);
   }
   sleep(1);
-
-  gpioTerminate();
 }
