@@ -51,6 +51,7 @@ int main(int argc, char *argv[]) {
                   << " | State: " << Motor::getStateString(control.state())
                   << std::endl;
         system("/bin/stty raw");
+        break;
     }
   }
 }
