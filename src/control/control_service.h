@@ -32,6 +32,27 @@ class ControlService {
   // @throws std::out_of_range
   void setSteeringAngle(double angle);
 
+  // Adjusts steering angle by "adj".
+  //
+  // @return  New angle value
+  double adjustSteeringAngle(double adj) noexcept;
+
+  // Adjusts throttle percentage.
+  //
+  // @return  New throttle percentage value.
+  double adjustThrottle(double adj) noexcept;
+
+  // Read API
+  Motor::State state() const noexcept {
+    return state_;
+  }
+  double throttle() const noexcept {
+    return throttle_;
+  }
+  double steeringAngle() const noexcept {
+    return steeringAngle_;
+  }
+
  private:
   Motor frontLeft_;
   Motor frontRight_;

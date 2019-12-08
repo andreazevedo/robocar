@@ -22,18 +22,35 @@ int main(int argc, char *argv[]) {
   char c;
   while ((c = getchar()) != 'q') {
     switch (c) {
+      case 'r':
+        control.setState(Motor::State::Backward);
+        break;
+      case 'f':
+        control.setState(Motor::State::Forward);
+        break;
+      case 'b':
+        control.setState(Motor::State::Release);
+        break;
       case 'w':
-        control.setThrottle(0.8);
+        control.adjustThrottle(+0.1);
         break;
       case 's':
-        control.setThrottle(0.0);
+        control.adjustThrottle(-0.1);
         break;
       case 'a':
-        control.setSteeringAngle(-80.0);
+        control.adjustSteeringAngle(-10.0);
         break;
       case 'd':
-        control.setSteeringAngle(+80.0);
+        control.adjustSteeringAngle(+10.0);
         break;
+      case 'p':
+        system("/bin/stty cooked");
+        std::cout << std::endl;
+        std::cout << "Throttle: " << control.throttle()
+                  << " | Steering angle: " << control.steeringAngle()
+                  << " | State: " << Motor::getStateString(control.state())
+                  << std::endl;
+        system("/bin/stty raw");
     }
   }
 }

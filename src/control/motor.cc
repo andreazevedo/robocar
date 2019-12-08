@@ -1,6 +1,7 @@
 #include "control/motor.h"
 
 #include <exception>
+#include <string>
 #include <utility>
 
 #include <pigpio.h>
@@ -180,6 +181,21 @@ void Motor::applyState() noexcept {
   }
 
   checkResult(gpioWrite(kMotorLatch, PI_HIGH));
+}
+
+/* static  */
+std::string Motor::getStateString(State state) noexcept {
+  switch (state) {
+    case State::Forward:
+      return "forward";
+    case State::Backward:
+      return "backward";
+    case State::Break:
+      return "break";
+    case State::Release:
+      return "release";
+  }
+  return "<invalid state>";
 }
 
 }  // namespace control

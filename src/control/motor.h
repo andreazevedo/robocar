@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdint>
+#include <string>
 
 namespace robocar {
 namespace control {
@@ -16,6 +17,7 @@ class Motor {
     Break = 3,
     Release = 4
   };
+  static std::string getStateString(State state) noexcept;
 
   // Maximum speed of the motor.
   constexpr static uint8_t kMaxSpeed = 255;

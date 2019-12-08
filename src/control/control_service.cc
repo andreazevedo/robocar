@@ -35,6 +35,24 @@ void ControlService::setSteeringAngle(double angle) {
   steeringAngle_ = angle;
   applyThrottleAndSteeringAngle();
 }
+double ControlService::adjustSteeringAngle(double adj) noexcept {
+  double newSteeringAngle = steeringAngle_ + adj;
+  newSteeringAngle = std::max(kMinSteeringAngle, newSteeringAngle);
+  newSteeringAngle = std::min(kMaxSteeringAngle, newSteeringAngle);
+
+  steeringAngle_ = newSteeringAngle;
+  applyThrottleAndSteeringAngle();
+  return steeringAngle_;
+}
+double ControlService::adjustThrottle(double adj) noexcept {
+  double newThrottle = throttle_ + adj;
+  newThrottle = std::max(0.0, newThrottle);
+  newThrottle = std::min(1.0, newThrottle);
+
+  throttle_ = newThrottle;
+  applyThrottleAndSteeringAngle();
+  return throttle_;
+}
 
 void ControlService::applyThrottleAndSteeringAngle() noexcept {
   uint8_t leftSpeed = Motor::kMaxSpeed * throttle_;
