@@ -14,12 +14,13 @@ int main(int argc, char *argv[]) {
   {
     ControlService control;
     control.setState(Motor::State::Forward);
-    control.setSpeed(150);
-    sleep(5);
-    control.setSpeed(125);
+    control.setThrottle(0.6);
+    control.setSteeringAngle(0.0);
     sleep(3);
-    control.setSpeed(100);
-    sleep(2);
+    control.setSteeringAngle(-25.0);
+    sleep(3);
+    control.setSteeringAngle(+50.0);
+    sleep(3);
   }
   sleep(1);
 }

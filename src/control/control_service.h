@@ -10,13 +10,27 @@ namespace control {
  */
 class ControlService {
  public:
+  constexpr static double kMinSteeringAngle = -90.0;
+  constexpr static double kMaxSteeringAngle = +90.0;
+
   ControlService() noexcept;
 
   // Sets the state of the motors.
   void setState(Motor::State newState) noexcept;
 
-  // Sets the speed of the motors.
-  void setSpeed(uint8_t speed) noexcept;
+  // Sets the throtlle percentage.
+  //
+  // @param throttle  Must be in the [0.0, 1.0] range.
+  //
+  // @throws  std::out_of_range
+  void setThrottle(double throttle);
+
+  // Sets the steering angle.
+  //
+  // @param angle  Must be between -90.0 and +90.0.
+  //
+  // @throws std::out_of_range
+  void setSteeringAngle(double angle);
 
  private:
   Motor frontLeft_;
@@ -24,11 +38,11 @@ class ControlService {
   Motor rearLeft_;
   Motor rearRight_;
 
-  uint8_t speed_{0};
+  double throttle_{0.0};
+  double steeringAngle_{0.0};
   Motor::State state_{Motor::State::Release};
-  double steering_{0.0};
 
-  void applySteeringAndSpeed() noexcept;
+  void applyThrottleAndSteeringAngle() noexcept;
 };
 
 }  // namespace control

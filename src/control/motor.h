@@ -17,6 +17,9 @@ class Motor {
     Release = 4
   };
 
+  // Maximum speed of the motor.
+  constexpr static uint8_t kMaxSpeed = 255;
+
   /**
    * Constructs a new motor
    *
