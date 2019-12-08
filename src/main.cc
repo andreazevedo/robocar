@@ -15,15 +15,13 @@ int main(int argc, char *argv[]) {
   ControlService control;
   control.setState(Motor::State::Forward);
 
+  // Set terminal to raw
+  system("/bin/stty raw");
+  std::atexit([]() { system("/bin/stty cooked"); });
+
   char c;
-  bool running = true;
-  while (running) {
-    c = getchar();
+  while ((c = getchar()) != 'q') {
     switch (c) {
-      case 'q':
-        running = false;
-        std::cout << "Exiting..." << std::endl;
-        break;
       case 'w':
         control.setThrottle(0.8);
         break;
