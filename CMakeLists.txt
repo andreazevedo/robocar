@@ -31,10 +31,10 @@ set(CONTROL_FILES
   src/control/util.h
 )
 add_library(control ${CONTROL_FILES})
-target_link_libraries(control pigpio)
+target_link_libraries(control pigpio pthread)
 
 set(ROBOCAR_FILES
   src/main.cc
 )
 add_executable(robocar ${ROBOCAR_FILES})
-target_link_libraries(robocar control)
+target_link_libraries(robocar control pthread)

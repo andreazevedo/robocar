@@ -162,12 +162,12 @@ void Motor::setSpeed(uint8_t speed) noexcept {
 /* static */
 uint8_t Motor::gLatchState = 0;
 /* static */
-void Motor::applyState() noexcept {
+void Motor::applyState(bool useDelay) noexcept {
   checkResult(gpioWrite(kMotorLatch, PI_LOW));
   checkResult(gpioWrite(kMotorData, PI_LOW));
 
   for (uint8_t i = 0; i < 8; i++) {
-    gpioDelay(10);  // 10 micros delay
+    if (useDelay) gpioDelay(10);  // 10 micros delay
     checkResult(gpioWrite(kMotorClk, PI_LOW));
 
     if (gLatchState & getBit(7 - i)) {
@@ -176,7 +176,7 @@ void Motor::applyState() noexcept {
       checkResult(gpioWrite(kMotorData, PI_LOW));
     }
 
-    gpioDelay(10);  // 10 micros delay
+    if (useDelay) gpioDelay(10);  // 10 micros delay
     checkResult(gpioWrite(kMotorClk, PI_HIGH));
   }
 
@@ -196,6 +196,11 @@ std::string Motor::getStateString(State state) noexcept {
       return "release";
   }
   return "<invalid state>";
+}
+
+/* static  */
+void Motor::applyStateNoDelay() noexcept {
+  applyState(false /* useDelay */);
 }
 
 }  // namespace control

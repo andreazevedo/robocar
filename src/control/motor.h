@@ -19,6 +19,9 @@ class Motor {
   };
   static std::string getStateString(State state) noexcept;
 
+  // Applies the state to all motors, without the delays
+  static void applyStateNoDelay() noexcept;
+
   // Maximum speed of the motor.
   constexpr static uint8_t kMaxSpeed = 255;
 
@@ -76,7 +79,7 @@ class Motor {
   void init() noexcept;
 
   // Applies latch state to all motors!
-  static void applyState() noexcept;
+  static void applyState(bool useDelay = true) noexcept;
 };
 
 }  // namespace control
