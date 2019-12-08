@@ -9,8 +9,8 @@ namespace control {
 ControlService::ControlService() noexcept
     : frontLeft_{1 /* motorId */},
       frontRight_{2 /* motorId */},
-      rearLeft_{3 /* motorId */},
-      rearRight_{4 /* motorId */} {}
+      rearLeft_{4 /* motorId */},
+      rearRight_{3 /* motorId */} {}
 
 void ControlService::setState(Motor::State newState) noexcept {
   state_ = newState;
@@ -41,9 +41,9 @@ void ControlService::applyThrottleAndSteeringAngle() noexcept {
   uint8_t rightSpeed = Motor::kMaxSpeed * throttle_;
 
   if (steeringAngle_ < 0.0) {
-    leftSpeed *= 1.0 - (abs(steeringAngle_) / 90.0);
+    rightSpeed = rightSpeed * (1.0 - (abs(steeringAngle_) / 90.0));
   } else if (steeringAngle_ > 0.0) {
-    rightSpeed *= 1.0 - (steeringAngle_ / 90.0);
+    leftSpeed = leftSpeed * (1.0 - (steeringAngle_ / 90.0));
   }
 
   rearRight_.setSpeed(rightSpeed);
