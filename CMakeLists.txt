@@ -38,3 +38,26 @@ set(ROBOCAR_FILES
 )
 add_executable(robocar ${ROBOCAR_FILES})
 target_link_libraries(robocar control pthread)
+
+
+# TESTS
+option(BUILD_TESTS "Compile the tests" OFF)
+if (BUILD_TESTS)
+  #find_package(GMock MODULE REQUIRED)
+  include(GoogleTest REQUIRED RESULT_VARIABLE HAVE_CMAKE_GTEST)
+  enable_testing()
+
+  macro(add_gtest test_source test_name)
+    add_executable(${test_name}
+      ${test_source}
+      test/test_main.cc)
+    target_include_directories(
+      ${test_name} PUBLIC ${LIBGMOCK_INCLUDE_DIR} ${LIBGTEST_INCLUDE_DIR})
+    target_link_libraries(${test_name} control ${LIBGMOCK_LIBRARIES})
+    add_test(${test_name} bin/${test_name})
+  endmacro(add_gtest)
+
+  # control tests
+
+  # runtime tests
+endif()
