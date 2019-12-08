@@ -1,3 +1,3 @@
 # Robocar
 
-A self-driving trolley built with raspberry pi and C++ 17.
+A self-driving car built with raspberry pi and C++ 17.

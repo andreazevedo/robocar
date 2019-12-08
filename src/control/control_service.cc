@@ -40,10 +40,10 @@ void ControlService::applyThrottleAndSteeringAngle() noexcept {
   uint8_t leftSpeed = Motor::kMaxSpeed * throttle_;
   uint8_t rightSpeed = Motor::kMaxSpeed * throttle_;
 
-  if (steeringAngle_ < 0.0) {
-    rightSpeed = rightSpeed * (1.0 - (abs(steeringAngle_) / 90.0));
-  } else if (steeringAngle_ > 0.0) {
-    leftSpeed = leftSpeed * (1.0 - (steeringAngle_ / 90.0));
+  if (steeringAngle_ > 0.0) {
+    rightSpeed = rightSpeed * (1.0 - (steeringAngle_ / 90.0));
+  } else if (steeringAngle_ < 0.0) {
+    leftSpeed = leftSpeed * (1.0 - (abs(steeringAngle_) / 90.0));
   }
 
   rearRight_.setSpeed(rightSpeed);
