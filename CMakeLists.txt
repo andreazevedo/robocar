@@ -33,12 +33,12 @@ set_target_properties(runtime PROPERTIES LINKER_LANGUAGE CXX)
 
 # control
 set(CONTROL_FILES
-  src/control/control_service.cc
-  src/control/control_service.h
   src/control/motor.cc
   src/control/motor.h
   src/control/util.cc
   src/control/util.h
+  src/control/vehicle.cc
+  src/control/vehicle.h
 )
 add_library(control ${CONTROL_FILES})
 target_link_libraries(control runtime pigpio pthread)

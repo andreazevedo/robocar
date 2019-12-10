@@ -6,14 +6,14 @@ namespace robocar {
 namespace control {
 
 /**
- * Service responsible for controlling the car.
+ * Responsible for controlling the car.
  */
-class ControlService {
+class Vehicle {
  public:
   constexpr static double kMinSteeringAngle = -90.0;
   constexpr static double kMaxSteeringAngle = +90.0;
 
-  ControlService() noexcept;
+  Vehicle() noexcept;
 
   // Sets the state of the motors.
   void setState(Motor::State newState) noexcept;
