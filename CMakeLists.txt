@@ -20,8 +20,18 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin)
 
-
+###########################
 # LIBRARIES & EXECUTABLES #
+###########################
+# runtime
+set(RUNTIME_FILES
+  src/runtime/mpsc_queue.h
+)
+add_library(runtime ${RUNTIME_FILES})
+target_link_libraries(runtime pthread)
+set_target_properties(runtime PROPERTIES LINKER_LANGUAGE CXX)
+
+# control
 set(CONTROL_FILES
   src/control/control_service.cc
   src/control/control_service.h
@@ -31,33 +41,38 @@ set(CONTROL_FILES
   src/control/util.h
 )
 add_library(control ${CONTROL_FILES})
-target_link_libraries(control pigpio pthread)
+target_link_libraries(control runtime pigpio pthread)
 
+# robocar
 set(ROBOCAR_FILES
   src/main.cc
 )
 add_executable(robocar ${ROBOCAR_FILES})
-target_link_libraries(robocar control pthread)
+target_link_libraries(robocar runtime control pthread)
 
 
-# TESTS
+#########
+# TESTS #
+#########
 option(BUILD_TESTS "Compile the tests" OFF)
 if (BUILD_TESTS)
-  #find_package(GMock MODULE REQUIRED)
+  find_package(GMock MODULE REQUIRED)
   include(GoogleTest REQUIRED RESULT_VARIABLE HAVE_CMAKE_GTEST)
   enable_testing()
 
   macro(add_gtest test_source test_name)
     add_executable(${test_name}
       ${test_source}
-      test/test_main.cc)
+      src/tests/test_main.cc)
     target_include_directories(
-      ${test_name} PUBLIC ${LIBGMOCK_INCLUDE_DIR} ${LIBGTEST_INCLUDE_DIR})
-    target_link_libraries(${test_name} control ${LIBGMOCK_LIBRARIES})
+      ${test_name} PUBLIC ${LIBGTEST_INCLUDE_DIR})
+    target_link_libraries(${test_name} control runtime ${LIBGMOCK_LIBRARIES})
     add_test(${test_name} bin/${test_name})
   endmacro(add_gtest)
 
+  # runtime tests
+  add_gtest(src/runtime/tests/mpsc_queue_test.cc MPSCQueueTest)
+
   # control tests
 
-  # runtime tests
 endif()
