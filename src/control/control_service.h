@@ -42,12 +42,14 @@ class ControlService {
 
   Vehicle vehicle_;
   runtime::MPSCQueue<std::function<void()>> queue_;
-  runtime::ServiceThread thread_;
 
   // This class keeps a thread-safe copy of the vehicle state.
-  std::atomic<double> throttle_;
-  std::atomic<double> steeringAngle_;
-  std::atomic<Motor::State> state_;
+  std::atomic<double> throttle_{0.0};
+  std::atomic<double> steeringAngle_{0.0};
+  std::atomic<Motor::State> state_{Motor::State::Release};
+
+  // The thread must be the first to be destroyed
+  runtime::ServiceThread thread_;
 
   void run();
 };

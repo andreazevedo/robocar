@@ -12,7 +12,11 @@ namespace robocar {
 namespace control {
 
 ControlService::ControlService()
-    : queue_(kTaskQueueSize), thread_([this]() { run(); }, kExecutionRateHz) {}
+    : queue_(kTaskQueueSize),
+      throttle_(vehicle_.throttle()),
+      steeringAngle_(vehicle_.steeringAngle()),
+      state_(vehicle_.state()),
+      thread_([this]() { run(); }, kExecutionRateHz) {}
 
 void ControlService::adjustVehicleState(double throttleDelta,
                                         double steeringAngleDelta) {

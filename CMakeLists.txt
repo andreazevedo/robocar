@@ -47,7 +47,7 @@ set(CONTROL_FILES
   src/control/vehicle.h
 )
 add_library(control ${CONTROL_FILES})
-target_link_libraries(control runtime pigpio pthread)
+target_link_libraries(control runtime pigpio pthread atomic)
 
 # robocar
 set(ROBOCAR_FILES
