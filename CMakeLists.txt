@@ -26,6 +26,8 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin)
 # runtime
 set(RUNTIME_FILES
   src/runtime/mpsc_queue.h
+  src/runtime/service_thread.cc
+  src/runtime/service_thread.h
 )
 add_library(runtime ${RUNTIME_FILES})
 target_link_libraries(runtime pthread)
@@ -72,6 +74,7 @@ if (BUILD_TESTS)
 
   # runtime tests
   add_gtest(src/runtime/tests/mpsc_queue_test.cc MPSCQueueTest)
+  add_gtest(src/runtime/tests/service_thread_test.cc ServiceThreadTest)
 
   # control tests
 
