@@ -28,6 +28,8 @@ set(RUNTIME_FILES
   src/runtime/mpsc_queue.h
   src/runtime/service_thread.cc
   src/runtime/service_thread.h
+  src/runtime/task_executor_thread.cc
+  src/runtime/task_executor_thread.h
 )
 add_library(runtime ${RUNTIME_FILES})
 target_link_libraries(runtime pthread)
@@ -75,6 +77,8 @@ if (BUILD_TESTS)
   # runtime tests
   add_gtest(src/runtime/tests/mpsc_queue_test.cc MPSCQueueTest)
   add_gtest(src/runtime/tests/service_thread_test.cc ServiceThreadTest)
+  add_gtest(
+    src/runtime/tests/task_executor_thread_test.cc TaskExecutorThreadTest)
 
   # control tests
 

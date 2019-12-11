@@ -29,7 +29,8 @@ void ServiceThread::callAndCatch() {
   try {
     func_();
   } catch (const std::exception& ex) {
-    std::cerr << "Exception caught in ServiceThread callback: " << ex.what();
+    std::cerr << "Exception caught in ServiceThread callback: " << ex.what()
+              << std::endl;
   }
 }
 

@@ -17,7 +17,8 @@ class ServiceThread {
    * Constructs a service thread.
    *
    * @param func      The function to be called.
-   * @param rateHz    The frequency at which the function should be called.
+   * @param rateHz    The frequency (in hertz) at which the function should be
+   *                  called.
    * @param callNow   Whether the function should be called right away (before
    *                  sleeping).
    */
