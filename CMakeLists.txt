@@ -40,15 +40,21 @@ add_library(runtime ${RUNTIME_FILES})
 target_link_libraries(runtime pthread)
 set_target_properties(runtime PROPERTIES LINKER_LANGUAGE CXX)
 
+# sensors
+set(SENSORS_FILES
+  src/sensors/camera.cc
+  src/sensors/camera.h
+)
+add_library(sensors ${SENSORS_FILES})
+target_link_libraries(sensors ${OpenCV_LIBS} raspicam_cv)
+
 # perception
 set(PERCEPTION_FILES
-  src/perception/camera.cc
-  src/perception/camera.h
   src/perception/lane_detector.cc
   src/perception/lane_detector.h
 )
 add_library(perception ${PERCEPTION_FILES})
-target_link_libraries(perception runtime ${OpenCV_LIBS} raspicam_cv)
+target_link_libraries(perception runtime ${OpenCV_LIBS})
 
 # control
 set(CONTROL_FILES
@@ -66,10 +72,12 @@ target_link_libraries(control runtime pigpio atomic)
 
 # robocar
 set(ROBOCAR_FILES
+  src/car.cc
+  src/car.h
   src/main.cc
 )
 add_executable(robocar ${ROBOCAR_FILES})
-target_link_libraries(robocar runtime perception control)
+target_link_libraries(robocar runtime sensors perception control)
 
 
 #########

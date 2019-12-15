@@ -6,14 +6,13 @@
 #include "third_party/raspicam/src/raspicam_cv.h"
 
 namespace robocar {
-namespace perception {
+namespace sensors {
 
 /**
  * Provide basic access to camera.
  */
 class Camera {
  public:
-
   /**
    * Constructs the camera and gets it ready to be used.
    *
@@ -41,5 +40,5 @@ class Camera {
   const std::optional<cv::RotateFlags> rotateFlags_;
 };
 
-}  // namespace perception
+}  // namespace sensors
 }  // namespace robocar

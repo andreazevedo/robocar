@@ -1,4 +1,4 @@
-#include "perception/camera.h"
+#include "sensors/camera.h"
 
 #include <stdexcept>
 
@@ -8,7 +8,7 @@
 #include "third_party/raspicam/src/raspicam_cv.h"
 
 namespace robocar {
-namespace perception {
+namespace sensors {
 
 namespace {
 std::optional<cv::RotateFlags> getRotateFlags(size_t cameraRotation) {
@@ -65,5 +65,5 @@ cv::Mat Camera::captureFrame() {
   return frame;
 }
 
-}  // namespace perception
+}  // namespace sensors
 }  // namespace robocar

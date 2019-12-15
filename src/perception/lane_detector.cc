@@ -11,9 +11,16 @@ LaneDetector::LaneDetector(bool saveDebugImages)
     : saveDebugImages_(saveDebugImages) {}
 
 std::vector<cv::Vec4i> LaneDetector::detect(const cv::Mat& frame) {
+  // get only the part of the image relevat for lane detection
+  int x = 0;
+  int y = frame.rows * 0.25;
+  int width = frame.cols;
+  int height = (frame.rows - y) * 0.6;
+  cv::Mat cropped = frame(cv::Rect(x, y, width, height));
+
   // convert to b&w
   cv::Mat gray;
-  cv::cvtColor(frame, gray, cv::COLOR_BGR2GRAY);
+  cv::cvtColor(cropped, gray, cv::COLOR_BGR2GRAY);
 
   // blurry image
   cv::Mat blurred;

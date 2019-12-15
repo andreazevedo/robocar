@@ -2,6 +2,7 @@
 
 #include <atomic>
 #include <cassert>
+#include <mutex>
 
 #include "control/motor.h"
 #include "control/vehicle.h"
