@@ -13,9 +13,16 @@ Car::Car() : camera_(180), thread_([this]() { loop(); }, kExecutionRateHz) {
   controlService_.setMotorState(control::Motor::State::Forward);
 }
 
+void Car::enableAutonomy() {
+  autonomyEnabled_.store(true, std::memory_order_relaxed);
+}
+void Car::disableAutonomy() {
+  autonomyEnabled_.store(false, std::memory_order_relaxed);
+  controlService_.setThrottle(0.0);
+}
+
 void Car::loop() {
   if (!autonomyEnabled_) {
-    controlService_.setThrottle(0.0);
     return;
   }
 

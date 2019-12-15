@@ -14,12 +14,8 @@ class Car {
  public:
   Car();
 
-  void enableAutonomy() {
-    autonomyEnabled_.store(true, std::memory_order_relaxed);
-  }
-  void disableAutonomy() {
-    autonomyEnabled_.store(false, std::memory_order_relaxed);
-  }
+  void enableAutonomy();
+  void disableAutonomy();
 
   const sensors::Camera& camera() const { return camera_; }
   sensors::Camera& camera() { return camera_; }
