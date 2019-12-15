@@ -11,7 +11,7 @@ class LaneDetector {
  public:
   LaneDetector(bool saveDebugImages = false);
 
-  std::vector<cv::Vec4i> detect(const cv::Mat& frame);
+  std::vector<cv::Vec4i> detectLines(const cv::Mat& frame);
 
  private:
   bool saveDebugImages_{false};

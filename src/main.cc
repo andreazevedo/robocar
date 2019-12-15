@@ -57,7 +57,7 @@ int main(int argc, char *argv[]) {
         break;
       case 'c':
         auto frame = car.camera().captureFrame();
-        car.laneDetector().detect(frame);
+        car.laneDetector().detectLines(frame);
         cv::imwrite("bin/images/photo.jpg", frame);
     }
   }

@@ -1,5 +1,6 @@
 #include "perception/lane_detector.h"
 
+#include <cmath>
 #include <vector>
 
 #include <opencv2/opencv.hpp>
@@ -10,7 +11,7 @@ namespace perception {
 LaneDetector::LaneDetector(bool saveDebugImages)
     : saveDebugImages_(saveDebugImages) {}
 
-std::vector<cv::Vec4i> LaneDetector::detect(const cv::Mat& frame) {
+std::vector<cv::Vec4i> LaneDetector::detectLines(const cv::Mat& frame) {
   // get only the part of the image relevat for lane detection
   int x = 0;
   int y = frame.rows * 0.25;
@@ -41,9 +42,23 @@ std::vector<cv::Vec4i> LaneDetector::detect(const cv::Mat& frame) {
 
     cv::Mat withLines = gray;
     cv::cvtColor(gray, withLines, cv::COLOR_GRAY2BGR);
-    for (const auto& l : lines) {
+    for (size_t i = 0; i < lines.size(); ++i) {
+      const auto& l = lines[i];
+      int r = (50 * (i + 0)) % 250;
+      int g = (25 * (i + 0)) % 250;
+      int b = (00 * (i + 0)) % 250;
       cv::line(withLines, cv::Point(l[0], l[1]), cv::Point(l[2], l[3]),
-               cv::Scalar(0, 255, 0), 3, cv::LINE_AA);
+               cv::Scalar(r, g, b), 3, cv::LINE_AA);
+
+      int x1 = l[0];
+      int y1 = l[1];
+      int x2 = l[2];
+      int y2 = l[3];
+      double theta = ::atan2((y2 - y1), (x2 - x1));
+      std::string txt = std::to_string(i) + ": " + std::to_string(theta);
+      cv::putText(withLines, txt, cv::Point(10, 10 * i),
+                  cv::FONT_HERSHEY_SIMPLEX, 0.3, cv::Scalar(r, g, b), 1,
+                  cv::LINE_AA);
     }
     cv::imwrite("bin/images/with_lines.jpg", withLines);
   }
