@@ -32,6 +32,48 @@ $ wget https://github.com/google/googletest/archive/release-1.10.0.tar.gz && \
     sudo make install
 ```
 
+##### 4) OpenCV
+```bash
+# First install dependencies
+$ sudo apt-get -y install build-essential cmake pkg-config \
+    libjpeg-dev libtiff-dev libjasper-dev libpng12-dev \
+    libavcodec-dev libavformat-dev libswscale-dev libv4l-dev \
+    libxvidcore-dev libx264-dev \
+    libatlas-base-dev gfortran
+
+# Build opencv from source
+$ wget -O opencv.tar.gz https://github.com/opencv/opencv/archive/4.1.2.tar.gz && \
+    wget -O opencv_contrib.tar.gz https://github.com/opencv/opencv_contrib/archive/4.1.2.tar.gz && \
+    tar zxf opencv.tar.gz && \
+    tar zxf opencv_contrib.tar.gz && \
+    mv opencv-4.1.2/ opencv && \
+    mv opencv_contrib-4.1.2/ opencv_contrib && \
+    cd opencv && \
+    mkdir build && \
+    cd build && \
+    cmake -D CMAKE_BUILD_TYPE=RELEASE \
+        -D CMAKE_INSTALL_PREFIX=/usr/local \
+        -D OPENCV_EXTRA_MODULES_PATH=~/opencv_contrib/modules \
+        -D ENABLE_NEON=ON \
+        -D ENABLE_VFPV3=ON \
+        -D BUILD_TESTS=OFF \
+        -D OPENCV_ENABLE_NONFREE=ON \
+        -D INSTALL_PYTHON_EXAMPLES=OFF \
+        -D BUILD_EXAMPLES=OFF .. &&
+    make -j4 &&
+    sudo make install &&
+    sudo ldconfig &&
+    sudo apt-get update
+
+# Clean up downloads
+$ cd ~/
+$ rm opencv.tar.gz && rm opencv_contrib.tar.gz
+$ rm -r opencv && rm -r opencv_contrib
+
+# Reboot
+$ sudo reboot
+```
+
 ### Build
 ```bash
 $ cmake .

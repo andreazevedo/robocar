@@ -9,9 +9,6 @@ project("robocar" VERSION 0.1.0 LANGUAGES CXX)
 # compiler options
 add_compile_options(-std=c++17)
 
-# list of dependencies
-find_package(pigpio MODULE REQUIRED)
-
 # add the src directory as include dir
 include_directories("${PROJECT_SOURCE_DIR}/src")
 
@@ -19,6 +16,12 @@ include_directories("${PROJECT_SOURCE_DIR}/src")
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin)
+
+################
+# DEPENDENCIES #
+################
+find_package(pigpio MODULE REQUIRED)
+add_subdirectory(third_party/raspicam)
 
 ###########################
 # LIBRARIES & EXECUTABLES #
@@ -35,6 +38,14 @@ add_library(runtime ${RUNTIME_FILES})
 target_link_libraries(runtime pthread)
 set_target_properties(runtime PROPERTIES LINKER_LANGUAGE CXX)
 
+# perception
+set(PERCEPTION_FILES
+  src/perception/camera.cc
+  src/perception/camera.h
+)
+add_library(perception ${PERCEPTION_FILES})
+target_link_libraries(perception runtime raspicam)
+
 # control
 set(CONTROL_FILES
   src/control/control_service.cc
@@ -47,14 +58,14 @@ set(CONTROL_FILES
   src/control/vehicle.h
 )
 add_library(control ${CONTROL_FILES})
-target_link_libraries(control runtime pigpio pthread atomic)
+target_link_libraries(control runtime pigpio atomic)
 
 # robocar
 set(ROBOCAR_FILES
   src/main.cc
 )
 add_executable(robocar ${ROBOCAR_FILES})
-target_link_libraries(robocar runtime control pthread)
+target_link_libraries(robocar runtime perception control)
 
 
 #########

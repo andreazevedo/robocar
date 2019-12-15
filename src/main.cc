@@ -1,10 +1,6 @@
-#include <unistd.h>
-#include <atomic>
-#include <chrono>
 #include <cstdio>
 #include <cstdlib>
 #include <iostream>
-#include <thread>
 
 #include "control/control_service.h"
 #include "control/motor.h"
