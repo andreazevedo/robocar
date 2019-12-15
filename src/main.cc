@@ -6,6 +6,7 @@
 #include "control/motor.h"
 #include "control/util.h"
 #include "perception/camera.h"
+#include "perception/lane_detector.h"
 
 using namespace robocar::control;
 using namespace robocar::perception;
@@ -16,7 +17,8 @@ int main(int argc, char *argv[]) {
   ControlService controlService;
   controlService.setMotorState(Motor::State::Forward);
 
-  Camera cam;
+  Camera cam(180);
+  LaneDetector laneDetector;
 
   // Set terminal to raw
   system("/bin/stty raw");
@@ -60,8 +62,9 @@ int main(int argc, char *argv[]) {
         system("/bin/stty raw");
         break;
       case 'c':
-        auto img = cam.captureFrame();
-        cv::imwrite("photo.jpg", img);
+        auto frame = cam.captureFrame();
+        laneDetector.detect(frame);
+        cv::imwrite("bin/images/photo.jpg", frame);
     }
   }
 }

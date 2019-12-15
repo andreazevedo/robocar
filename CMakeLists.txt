@@ -44,6 +44,8 @@ set_target_properties(runtime PROPERTIES LINKER_LANGUAGE CXX)
 set(PERCEPTION_FILES
   src/perception/camera.cc
   src/perception/camera.h
+  src/perception/lane_detector.cc
+  src/perception/lane_detector.h
 )
 add_library(perception ${PERCEPTION_FILES})
 target_link_libraries(perception runtime ${OpenCV_LIBS} raspicam_cv)
