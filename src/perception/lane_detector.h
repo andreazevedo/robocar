@@ -9,11 +9,11 @@ namespace perception {
 
 class LaneDetector {
  public:
-  LaneDetector(bool saveDebugImages = false);
-
-  double getSteeringAngle(const cv::Mat& frame);
+  double getFinalSlope(const std::vector<cv::Vec4i>& lines);
 
   std::vector<cv::Vec4i> detectLines(const cv::Mat& frame);
+
+  void setSaveDebugImages(bool val) noexcept { saveDebugImages_ = val; }
 
  private:
   bool saveDebugImages_{false};

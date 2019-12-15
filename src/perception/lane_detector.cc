@@ -8,42 +8,65 @@
 namespace robocar {
 namespace perception {
 
-LaneDetector::LaneDetector(bool saveDebugImages)
-    : saveDebugImages_(saveDebugImages) {}
-
-double LaneDetector::getSteeringAngle(const cv::Mat& frame) {
-  auto lines = detectLines(frame);
-
-  double theta = 0.0;
+double LaneDetector::getFinalSlope(const std::vector<cv::Vec4i>& lines) {
+  double rightTheta = 0.0;
+  double leftTheta = 0.0;
+  size_t rightLinesCount = 0;
+  size_t leftLinesCount = 0;
   for (const auto& line : lines) {
-    int x1 = line[0];
-    int y1 = line[1];
-    int x2 = line[2];
-    int y2 = line[3];
-    theta += ::atan2((y2 - y1), (x2 - x1));
+    double x1 = line[0];
+    double y1 = line[1];
+    double x2 = line[2];
+    double y2 = line[3];
+    double theta = ::atan2((y2 - y1), (x2 - x1));
+    if (isnan(theta) || abs(theta) < 0.01) {
+      // pretty much a horizontal line, ignore.
+      continue;
+    } else if (theta > 0.0) {
+      // right lane
+      rightTheta += theta;
+      rightLinesCount++;
+    } else if (theta < 0.0) {
+      // right lane
+      leftTheta += theta;
+      leftLinesCount++;
+    }
   }
-  return theta / lines.size();
+
+  if (rightLinesCount == 0 && leftLinesCount == 0) {
+    return 0.0;
+  } else if (rightLinesCount == 0) {
+    return (leftTheta / leftLinesCount);
+  } else if (leftLinesCount == 0) {
+    return (rightTheta / rightLinesCount);
+  }
+
+  return (rightTheta / rightLinesCount) - (leftTheta / leftLinesCount);
 }
 
 std::vector<cv::Vec4i> LaneDetector::detectLines(const cv::Mat& frame) {
   // get only the part of the image relevat for lane detection
   int x = 0;
-  int y = frame.rows * 0.25;
+  int y = frame.rows * 0.30;
   int width = frame.cols;
-  int height = (frame.rows - y) * 0.6;
+  int height = (frame.rows - y) * 0.7;
   cv::Mat cropped = frame(cv::Rect(x, y, width, height));
 
   // convert to b&w
-  cv::Mat gray;
-  cv::cvtColor(cropped, gray, cv::COLOR_BGR2GRAY);
+  const cv::Mat& gray = cropped;  // it's already b&w
+  // cv::cvtColor(cropped, gray, cv::COLOR_BGR2GRAY);
 
   // blurry image
   cv::Mat blurred;
   cv::GaussianBlur(gray, blurred, cv::Size(3, 3), 0);
 
+  // crop the blurried image again
+  cv::Mat croppedBlurred =
+      blurred(cv::Rect(2, 0, blurred.cols - 2, blurred.rows));
+
   // canny - get edges
   cv::Mat edged;
-  cv::Canny(blurred, edged, 85, 85);
+  cv::Canny(croppedBlurred, edged, 85, 85);
 
   // Hough lines
   std::vector<cv::Vec4i> lines;
@@ -74,6 +97,11 @@ std::vector<cv::Vec4i> LaneDetector::detectLines(const cv::Mat& frame) {
                   cv::FONT_HERSHEY_SIMPLEX, 0.3, cv::Scalar(r, g, b), 1,
                   cv::LINE_AA);
     }
+    double theta = getFinalSlope(lines);
+    std::string txt = "Theta: " + std::to_string(theta);
+    cv::putText(withLines, txt, cv::Point(10, 10 * (lines.size() + 1)),
+                cv::FONT_HERSHEY_SIMPLEX, 0.5, cv::Scalar(255, 0, 0), 1,
+                cv::LINE_AA);
     cv::imwrite("bin/images/with_lines.jpg", withLines);
   }
 

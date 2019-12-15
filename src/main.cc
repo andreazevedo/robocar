@@ -57,8 +57,10 @@ int main(int argc, char *argv[]) {
         break;
       case 'c': {
         auto frame = car.camera().captureFrame();
+        car.laneDetector().setSaveDebugImages(true);
         car.laneDetector().detectLines(frame);
         cv::imwrite("bin/images/photo.jpg", frame);
+        car.laneDetector().setSaveDebugImages(false);
       } break;
       case 'm':
         car.enableAutonomy();
