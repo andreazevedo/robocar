@@ -30,15 +30,24 @@ std::vector<cv::Vec4i> LaneDetector::detect(const cv::Mat& frame) {
   cv::Mat edged;
   cv::Canny(blurred, edged, 85, 85);
 
+  // Hough lines
+  std::vector<cv::Vec4i> lines;
+  cv::HoughLinesP(edged, lines, 1, CV_PI / 180, 50, 50, 10);
+
   if (saveDebugImages_) {
     cv::imwrite("bin/images/gray.jpg", gray);
     cv::imwrite("bin/images/blurred.jpg", blurred);
     cv::imwrite("bin/images/edged.jpg", edged);
+
+    cv::Mat withLines = gray;
+    cv::cvtColor(gray, withLines, cv::COLOR_GRAY2BGR);
+    for (const auto& l : lines) {
+      cv::line(withLines, cv::Point(l[0], l[1]), cv::Point(l[2], l[3]),
+               cv::Scalar(0, 255, 0), 3, cv::LINE_AA);
+    }
+    cv::imwrite("bin/images/with_lines.jpg", withLines);
   }
 
-  // Hough lines
-  std::vector<cv::Vec4i> lines;
-  cv::HoughLinesP(edged, lines, 1, CV_PI / 180, 50, 50, 10);
   return lines;
 }
 
