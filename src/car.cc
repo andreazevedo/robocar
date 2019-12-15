@@ -29,7 +29,7 @@ void Car::loop() {
   }
 
   double slope = laneDetector_.getFinalSlope(lines);
-  double angle = slope * 150;
+  double angle = slope * 90;
   angle *= -1;
   angle = std::min(90.0, angle);
   angle = std::max(-90.0, angle);

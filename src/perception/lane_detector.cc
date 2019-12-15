@@ -33,15 +33,24 @@ double LaneDetector::getFinalSlope(const std::vector<cv::Vec4i>& lines) {
     }
   }
 
+  double finalTheta;
   if (rightLinesCount == 0 && leftLinesCount == 0) {
-    return 0.0;
+    finalTheta = 0.0;
   } else if (rightLinesCount == 0) {
-    return (leftTheta / leftLinesCount);
+    finalTheta = (leftTheta / leftLinesCount);
   } else if (leftLinesCount == 0) {
-    return (rightTheta / rightLinesCount);
+    finalTheta = (rightTheta / rightLinesCount);
+  } else {
+    finalTheta = (rightTheta / rightLinesCount) - (leftTheta / leftLinesCount);
   }
 
-  return (rightTheta / rightLinesCount) - (leftTheta / leftLinesCount);
+  // Adjust angle - we want horizontal lines to be infinite, not vertical.
+  if (finalTheta < 0) {
+    finalTheta = (1.0 + finalTheta) * -1;
+  } else {
+    finalTheta = 1.0 - finalTheta;
+  }
+  return finalTheta;
 }
 
 std::vector<cv::Vec4i> LaneDetector::detectLines(const cv::Mat& frame) {
