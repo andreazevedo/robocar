@@ -19,7 +19,7 @@ double LaneDetector::getFinalSlope(const std::vector<cv::Vec4i>& lines) {
     double x2 = line[2];
     double y2 = line[3];
     double theta = ::atan2((y2 - y1), (x2 - x1));
-    if (isnan(theta) || abs(theta) < 0.01) {
+    if (isnan(theta) || ::fabs(theta) < 0.01) {
       // pretty much a horizontal line, ignore.
       continue;
     } else if (theta > 0.0) {

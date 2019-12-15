@@ -6,6 +6,23 @@
 namespace robocar {
 namespace control {
 
+namespace {
+constexpr uint8_t kMinMotorSpeed = 115;  // Tune according to vehicle wait, etc.
+
+bool isZero(double val) {
+  constexpr double kEps = 0.0001;
+  return ::fabs(val) < kEps;
+}
+
+uint8_t getMotorSpeed(double throttle) {
+  uint8_t speed = 0;
+  if (!isZero(throttle)) {
+    speed = kMinMotorSpeed + ((Motor::kMaxSpeed - kMinMotorSpeed) * throttle);
+  }
+  return speed;
+}
+}  // namespace
+
 Vehicle::Vehicle() noexcept
     : frontLeft_{1 /* motorId */},
       frontRight_{2 /* motorId */},
@@ -55,13 +72,13 @@ double Vehicle::adjustThrottle(double adj) noexcept {
 }
 
 void Vehicle::applyThrottleAndSteeringAngle() noexcept {
-  uint8_t leftSpeed = Motor::kMaxSpeed * throttle_;
-  uint8_t rightSpeed = Motor::kMaxSpeed * throttle_;
+  uint8_t leftSpeed = getMotorSpeed(throttle_);
+  uint8_t rightSpeed = getMotorSpeed(throttle_);
 
   if (steeringAngle_ > 0.0) {
-    rightSpeed = rightSpeed * (1.0 - (steeringAngle_ / 90.0));
+    rightSpeed *= (1.0 - (steeringAngle_ / 90.0));
   } else if (steeringAngle_ < 0.0) {
-    leftSpeed = leftSpeed * (1.0 - (abs(steeringAngle_) / 90.0));
+    leftSpeed *= (1.0 - (::fabs(steeringAngle_) / 90.0));
   }
 
   rearRight_.setSpeed(rightSpeed);

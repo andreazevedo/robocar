@@ -42,9 +42,9 @@ void Car::loop() {
   angle = std::max(-90.0, angle);
   std::cout << "Angle: " << angle << ". Lines: " << lines.size() << std::endl;
 
-  double throttle = 0.60;
+  double throttle = 0.30;
   if (::abs(angle) > 38) {
-    throttle = 0.75;
+    throttle = 0.35;
   }
   controlService_.setSteeringAngle(angle);
   controlService_.setThrottle(throttle);
