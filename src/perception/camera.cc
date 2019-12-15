@@ -11,7 +11,11 @@ namespace robocar {
 namespace perception {
 
 Camera::Camera() {
-  piCam_.set(cv::CAP_PROP_FORMAT, CV_8UC1);  // set camera params
+  // set camera params
+  piCam_.set(cv::CAP_PROP_FORMAT, CV_8UC1);  
+  piCam_.set(cv::CAP_PROP_FRAME_WIDTH, 640);
+  piCam_.set(cv::CAP_PROP_FRAME_HEIGHT, 480);
+  piCam_.set(cv::CAP_PROP_BRIGHTNESS, 50);
   if (!piCam_.open()) {
     throw std::runtime_error("Error opening the camera");
   }
