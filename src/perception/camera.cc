@@ -1,4 +1,31 @@
+#include "perception/camera.h"
+
+#include <stdexcept>
+
+#include <opencv2/core/base.hpp>
+#include <opencv2/videoio.hpp>
+
+#include "third_party/raspicam/src/raspicam_cv.h"
+
 namespace robocar {
 namespace perception {
+
+Camera::Camera() {
+  piCam_.set(cv::CAP_PROP_FORMAT, CV_8UC1);  // set camera params
+  if (!piCam_.open()) {
+    throw std::runtime_error("Error opening the camera");
+  }
+}
+Camera::~Camera() { piCam_.release(); }
+
+cv::Mat Camera::captureFrame() {
+  cv::Mat image;
+
+  piCam_.grab();
+  piCam_.retrieve(image);
+
+  return image;
+}
+
 }  // namespace perception
 }  // namespace robocar

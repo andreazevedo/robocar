@@ -10,7 +10,8 @@ project("robocar" VERSION 0.1.0 LANGUAGES CXX)
 add_compile_options(-std=c++17)
 
 # add the src directory as include dir
-include_directories("${PROJECT_SOURCE_DIR}/src")
+include_directories("${PROJECT_SOURCE_DIR}/src"
+                    "${PROJECT_SOURCE_DIR}")
 
 # set the output diretory
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin)
@@ -21,6 +22,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin)
 # DEPENDENCIES #
 ################
 find_package(pigpio MODULE REQUIRED)
+find_package(OpenCV MODULE REQUIRED)
 add_subdirectory(third_party/raspicam)
 
 ###########################
@@ -44,7 +46,7 @@ set(PERCEPTION_FILES
   src/perception/camera.h
 )
 add_library(perception ${PERCEPTION_FILES})
-target_link_libraries(perception runtime raspicam)
+target_link_libraries(perception runtime ${OpenCV_LIBS} raspicam_cv)
 
 # control
 set(CONTROL_FILES

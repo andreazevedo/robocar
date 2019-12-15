@@ -5,14 +5,18 @@
 #include "control/control_service.h"
 #include "control/motor.h"
 #include "control/util.h"
+#include "perception/camera.h"
 
 using namespace robocar::control;
+using namespace robocar::perception;
 
 int main(int argc, char *argv[]) {
   globalPigpioInitialize();
 
   ControlService controlService;
   controlService.setMotorState(Motor::State::Forward);
+
+  Camera cam;
 
   // Set terminal to raw
   system("/bin/stty raw");
@@ -55,6 +59,9 @@ int main(int argc, char *argv[]) {
                   << Motor::getStateString(controlService.state()) << std::endl;
         system("/bin/stty raw");
         break;
+      case 'c':
+        auto img = cam.captureFrame();
+        cv::imwrite("photo.jpg", img);
     }
   }
 }
