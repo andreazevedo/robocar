@@ -51,7 +51,9 @@ class ControlService {
   // The thread must be the first to be destroyed
   runtime::ServiceThread thread_;
 
-  void run();
+  // The loop function of the service.
+  // This function will be called at the specified frequency.
+  void loop();
 };
 
 }  // namespace control

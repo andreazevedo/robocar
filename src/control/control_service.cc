@@ -17,7 +17,7 @@ ControlService::ControlService()
       throttle_(vehicle_.throttle()),
       steeringAngle_(vehicle_.steeringAngle()),
       state_(vehicle_.state()),
-      thread_([this]() { run(); }, kExecutionRateHz) {}
+      thread_([this]() { loop(); }, kExecutionRateHz) {}
 
 void ControlService::adjustVehicleState(double throttleDelta,
                                         double steeringAngleDelta) {
@@ -54,7 +54,7 @@ void ControlService::setMotorState(Motor::State state) {
   assert(scheduled);
 }
 
-void ControlService::run() {
+void ControlService::loop() {
   std::function<void()> task;
   while (queue_.pop(task)) {
     task();

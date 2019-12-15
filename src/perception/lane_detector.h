@@ -11,6 +11,8 @@ class LaneDetector {
  public:
   LaneDetector(bool saveDebugImages = false);
 
+  double getSteeringAngle(const cv::Mat& frame);
+
   std::vector<cv::Vec4i> detectLines(const cv::Mat& frame);
 
  private:

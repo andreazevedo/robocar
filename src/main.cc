@@ -14,7 +14,7 @@ int main(int argc, char *argv[]) {
   robocar::Car car;
 
   // Set terminal to raw
-  system("/bin/stty raw");
+  // system("/bin/stty raw");
   std::atexit([]() { system("/bin/stty cooked"); });
 
   char c = '\0';
@@ -46,19 +46,26 @@ int main(int argc, char *argv[]) {
                                                 +10.0 /* steering */);
         break;
       case 'p':
-        system("/bin/stty cooked");
+        //system("/bin/stty cooked");
         std::cout << '\n';
         std::cout << "Throttle: " << car.controlService().throttle()
                   << " | Steering angle: "
                   << car.controlService().steeringAngle() << " | State: "
                   << Motor::getStateString(car.controlService().state())
                   << std::endl;
-        system("/bin/stty raw");
+        //system("/bin/stty raw");
         break;
-      case 'c':
+      case 'c': {
         auto frame = car.camera().captureFrame();
         car.laneDetector().detectLines(frame);
         cv::imwrite("bin/images/photo.jpg", frame);
+      } break;
+      case 'm':
+        car.enableAutonomy();
+        break;
+      case 'n':
+        car.disableAutonomy();
+        break;
     }
   }
 }

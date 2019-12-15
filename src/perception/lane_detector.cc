@@ -11,6 +11,20 @@ namespace perception {
 LaneDetector::LaneDetector(bool saveDebugImages)
     : saveDebugImages_(saveDebugImages) {}
 
+double LaneDetector::getSteeringAngle(const cv::Mat& frame) {
+  auto lines = detectLines(frame);
+
+  double theta = 0.0;
+  for (const auto& line : lines) {
+    int x1 = line[0];
+    int y1 = line[1];
+    int x2 = line[2];
+    int y2 = line[3];
+    theta += ::atan2((y2 - y1), (x2 - x1));
+  }
+  return theta / lines.size();
+}
+
 std::vector<cv::Vec4i> LaneDetector::detectLines(const cv::Mat& frame) {
   // get only the part of the image relevat for lane detection
   int x = 0;
