@@ -56,7 +56,7 @@ double LaneDetector::getFinalSlope(const std::vector<cv::Vec4i>& lines) {
 std::vector<cv::Vec4i> LaneDetector::detectLines(const cv::Mat& frame) {
   // get only the part of the image relevat for lane detection
   int x = 0;
-  int y = frame.rows * 0.30;
+  int y = frame.rows * 0.3;
   int width = frame.cols;
   int height = (frame.rows - y) * 0.7;
   cv::Mat cropped = frame(cv::Rect(x, y, width, height));
