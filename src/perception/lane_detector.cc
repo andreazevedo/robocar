@@ -8,7 +8,7 @@
 namespace robocar {
 namespace perception {
 
-double LaneDetector::getFinalSlope(const std::vector<cv::Vec4i>& lines) {
+double LaneDetector::getAverageSlope(const std::vector<cv::Vec4i>& lines) {
   double rightTheta = 0.0;
   double leftTheta = 0.0;
   size_t rightLinesCount = 0;
@@ -27,7 +27,7 @@ double LaneDetector::getFinalSlope(const std::vector<cv::Vec4i>& lines) {
       rightTheta += theta;
       rightLinesCount++;
     } else if (theta < 0.0) {
-      // right lane
+      // left lane
       leftTheta += theta;
       leftLinesCount++;
     }
@@ -106,7 +106,7 @@ std::vector<cv::Vec4i> LaneDetector::detectLines(const cv::Mat& frame) {
                   cv::FONT_HERSHEY_SIMPLEX, 0.3, cv::Scalar(r, g, b), 1,
                   cv::LINE_AA);
     }
-    double theta = getFinalSlope(lines);
+    double theta = getAverageSlope(lines);
     std::string txt = "Theta: " + std::to_string(theta);
     cv::putText(withLines, txt, cv::Point(10, 10 * (lines.size() + 1)),
                 cv::FONT_HERSHEY_SIMPLEX, 0.5, cv::Scalar(255, 0, 0), 1,

@@ -11,7 +11,7 @@ using robocar::control::Motor;
 int main(int argc, char *argv[]) {
   robocar::control::globalPigpioInitialize();
 
-  robocar::Car car;
+  robocar::Car car(true /* log debug info */);
 
   // Set terminal to raw
   // system("/bin/stty raw");
@@ -46,14 +46,14 @@ int main(int argc, char *argv[]) {
                                                 +10.0 /* steering */);
         break;
       case 'p':
-        //system("/bin/stty cooked");
+        // system("/bin/stty cooked");
         std::cout << '\n';
         std::cout << "Throttle: " << car.controlService().throttle()
                   << " | Steering angle: "
                   << car.controlService().steeringAngle() << " | State: "
                   << Motor::getStateString(car.controlService().state())
                   << std::endl;
-        //system("/bin/stty raw");
+        // system("/bin/stty raw");
         break;
       case 'c': {
         auto frame = car.camera().captureFrame();

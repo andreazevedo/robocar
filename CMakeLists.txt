@@ -56,6 +56,15 @@ set(PERCEPTION_FILES
 add_library(perception ${PERCEPTION_FILES})
 target_link_libraries(perception runtime ${OpenCV_LIBS})
 
+# planning
+set(PLANNING_FILES
+  src/planning/planner.cc
+  src/planning/planner.h
+  src/planning/planning_result.h
+)
+add_library(planning ${PLANNING_FILES})
+target_link_libraries(planning runtime ${OpenCV_LIBS})
+
 # control
 set(CONTROL_FILES
   src/control/control_service.cc
@@ -77,7 +86,7 @@ set(ROBOCAR_FILES
   src/main.cc
 )
 add_executable(robocar ${ROBOCAR_FILES})
-target_link_libraries(robocar runtime sensors perception control)
+target_link_libraries(robocar runtime sensors perception planning control)
 
 
 #########

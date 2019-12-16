@@ -2,6 +2,7 @@
 
 #include "control/control_service.h"
 #include "perception/lane_detector.h"
+#include "planning/planner.h"
 #include "runtime/service_thread.h"
 #include "sensors/camera.h"
 
@@ -12,7 +13,7 @@ namespace robocar {
  */
 class Car {
  public:
-  Car();
+  Car(bool debugInfoEnabled = false);
 
   void enableAutonomy();
   void disableAutonomy();
@@ -33,12 +34,13 @@ class Car {
 
   sensors::Camera camera_;
   perception::LaneDetector laneDetector_;
+  planning::Planner planner_;
   control::ControlService controlService_;
   runtime::ServiceThread thread_;
   std::atomic<bool> autonomyEnabled_{false};
+  const bool debugInfoEnabled_{false};
 
   void loop();
 };
 
 }  // namespace robocar
-

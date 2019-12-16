@@ -9,7 +9,10 @@
 
 namespace robocar {
 
-Car::Car() : camera_(180), thread_([this]() { loop(); }, kExecutionRateHz) {
+Car::Car(bool debugInfoEnabled)
+    : camera_(180),
+      thread_([this]() { loop(); }, kExecutionRateHz),
+      debugInfoEnabled_(debugInfoEnabled) {
   controlService_.setMotorState(control::Motor::State::Forward);
 }
 
@@ -32,22 +35,19 @@ void Car::loop() {
     // no lines detected - probably the image is to blurry. Stop the car
     controlService_.setSteeringAngle(0.0);
     controlService_.setThrottle(0.0);
+    std::cout << "Lines not found!" << std::endl;
     return;
   }
+  double slope = laneDetector_.getAverageSlope(lines);
+  planning::PlanningResult plan = planner_.calculateRoute(slope);
 
-  double slope = laneDetector_.getFinalSlope(lines);
-  double angle = slope * 90;
-  angle *= -1;
-  angle = std::min(90.0, angle);
-  angle = std::max(-90.0, angle);
-  std::cout << "Angle: " << angle << ". Lines: " << lines.size() << std::endl;
+  controlService_.setSteeringAngle(plan.steeringAngle);
+  controlService_.setThrottle(plan.throttle);
 
-  double throttle = 0.40;
-  if (::abs(angle) > 38) {
-    throttle = 0.50;
+  if (debugInfoEnabled_) {
+    std::cout << "Angle: " << plan.steeringAngle << ". Lines: " << lines.size()
+              << std::endl;
   }
-  controlService_.setSteeringAngle(angle);
-  controlService_.setThrottle(throttle);
 }
 
 }  // namespace robocar
