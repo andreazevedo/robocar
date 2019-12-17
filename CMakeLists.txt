@@ -28,6 +28,15 @@ add_subdirectory(third_party/raspicam)
 ###########################
 # LIBRARIES & EXECUTABLES #
 ###########################
+# math
+set(MATH_FILES
+  src/math/poly.cc
+  src/math/poly.h
+)
+add_library(math ${MATH_FILES})
+target_link_libraries(math ${OpenCV_LIBS})
+set_target_properties(math PROPERTIES LINKER_LANGUAGE CXX)
+
 # runtime
 set(RUNTIME_FILES
   src/runtime/mpsc_queue.h
@@ -54,7 +63,7 @@ set(PERCEPTION_FILES
   src/perception/lane_detector.h
 )
 add_library(perception ${PERCEPTION_FILES})
-target_link_libraries(perception runtime ${OpenCV_LIBS})
+target_link_libraries(perception math runtime ${OpenCV_LIBS})
 
 # planning
 set(PLANNING_FILES

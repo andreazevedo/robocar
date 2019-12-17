@@ -6,10 +6,38 @@
 
 #include <opencv2/opencv.hpp>
 
+#include "math/poly.h"
+
 namespace robocar {
 namespace perception {
 
 namespace {
+
+LaneLine calcAverageLine(const std::vector<LaneLine>& lines) {
+  LaneLine avg{0.0, 0.0};
+  for (const auto& line : lines) {
+    avg.slope += line.slope;
+    avg.intercept += line.intercept;
+  }
+  avg.slope /= lines.size();
+  avg.intercept /= lines.size();
+  return avg;
+}
+
+std::vector<cv::Vec4i> createPoints(const cv::Mat& frame,
+                                    const LaneLine& laneLine) {
+  int width = frame.cols;
+  int height = frame.rows;
+  int y1 = height;
+  int y2 = y1 * 0.5;
+
+  // bound the coordinates within the frame
+  int x1 = std::max(-width, std::min(2 * width, int((y1 - laneLine.intercept) /
+                                                    laneLine.slope)));
+  int x2 = std::max(-width, std::min(2 * width, int((y2 - laneLine.intercept) /
+                                                    laneLine.slope)));
+  return {{x1, y1, x2, y2}};
+}
 
 double getAverageSlopeImpl(const std::vector<cv::Vec4i>& lines) {
   double rightTheta = 0.0;
@@ -56,6 +84,48 @@ double getAverageSlopeImpl(const std::vector<cv::Vec4i>& lines) {
   return finalTheta;
 }
 
+Lane getLaneImpl(const std::vector<cv::Vec4i>& lines, int frameWidth) {
+  constexpr double lineBoundary = 1.0 / 3.0;
+  const size_t leftLineEnd = frameWidth - (frameWidth * lineBoundary);
+  const size_t rightLineStart = frameWidth * lineBoundary;
+
+  std::vector<LaneLine> leftFit;
+  std::vector<LaneLine> rightFit;
+
+  for (const auto& line : lines) {
+    int x1 = line[0];
+    int y1 = line[1];
+    int x2 = line[2];
+    int y2 = line[3];
+    double theta = ::atan2((y2 - y1), (x2 - x1));
+    if (isnan(theta) || ::fabs(theta) < 0.001) {
+      // pretty much a horizontal line, ignore.
+      continue;
+    }
+    auto fit = math::polyfit({cv::Point(x1, x2), cv::Point(y1, y2)}, 1);
+    double slope = fit[0];
+    double intercept = fit[1];
+    if (slope < 0) {
+      if (x1 < leftLineEnd && x2 < leftLineEnd) {
+        leftFit.emplace_back(LaneLine{slope, intercept});
+      }
+    } else {
+      if (x1 > rightLineStart && x2 > rightLineStart) {
+        rightFit.emplace_back(LaneLine{slope, intercept});
+      }
+    }
+  }
+
+  Lane lane;
+  if (leftFit.size() > 0) {
+    lane.left.emplace(calcAverageLine(leftFit));
+  }
+  if (rightFit.size() > 0) {
+    lane.right.emplace(calcAverageLine(rightFit));
+  }
+  return lane;
+}
+
 }  // namespace
 
 std::optional<double> LaneDetector::getAverageSlope(const cv::Mat& frame) {
@@ -64,6 +134,11 @@ std::optional<double> LaneDetector::getAverageSlope(const cv::Mat& frame) {
     return std::nullopt;
   }
   return getAverageSlopeImpl(lines);
+}
+
+Lane LaneDetector::getLane(const cv::Mat& frame) {
+  auto lines = detectLines(frame);
+  return getLaneImpl(lines, frame.cols);
 }
 
 std::vector<cv::Vec4i> LaneDetector::detectLines(const cv::Mat& frame) {

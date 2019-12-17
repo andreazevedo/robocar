@@ -8,6 +8,22 @@
 namespace robocar {
 namespace perception {
 
+/**
+ * Represents one of the lines of the lane (either left or right line).
+ */
+struct LaneLine {
+  double slope{0.0};
+  double intercept{0};
+};
+
+/**
+ * A lane - it might be incomplete if e.g. we camera can't see one of the lines
+ */
+struct Lane {
+  std::optional<LaneLine> left;
+  std::optional<LaneLine> right;
+};
+
 class LaneDetector {
  public:
   /**
@@ -19,7 +35,14 @@ class LaneDetector {
    *
    * @return  The average slope, or nullopt if a slope couldn't be calculated.
    */
-   std::optional<double> getAverageSlope(const cv::Mat& frame);
+  std::optional<double> getAverageSlope(const cv::Mat& frame);
+
+  /**
+   * Get information about the lane.
+   *
+   * @param frame   Photo of the view of the car. Must be in gray scale.
+   */
+  Lane getLane(const cv::Mat& frame);
 
   /**
    * Whether or not we should save debug images.
