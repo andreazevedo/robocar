@@ -42,7 +42,7 @@ Camera::Camera(size_t cameraRotation)
   piCam_.set(cv::CAP_PROP_FRAME_WIDTH, 640);
   piCam_.set(cv::CAP_PROP_FRAME_HEIGHT, 480);
   piCam_.set(cv::CAP_PROP_FPS, 30);
-  piCam_.set(cv::CAP_PROP_EXPOSURE, 25);
+  piCam_.set(cv::CAP_PROP_EXPOSURE, 30);
   //piCam_.set(cv::CAP_PROP_BRIGHTNESS, 55);
   //piCam_.set(cv::CAP_PROP_CONTRAST, 55);
   //piCam_.set(cv::CAP_PROP_SATURATION, 50);

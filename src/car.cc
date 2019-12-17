@@ -30,23 +30,21 @@ void Car::loop() {
   }
 
   auto frame = camera_.captureFrame();
-  auto lines = laneDetector_.detectLines(frame);
-  if (lines.empty()) {
+  std::optional<double> slope = laneDetector_.getAverageSlope(frame);
+  if (!slope) {
     // no lines detected - probably the image is to blurry. Stop the car
     controlService_.setSteeringAngle(0.0);
     controlService_.setThrottle(0.0);
-    std::cout << "Lines not found!" << std::endl;
+    std::cout << "Couldn't compute slope!" << std::endl;
     return;
   }
-  double slope = laneDetector_.getAverageSlope(lines);
-  planning::PlanningResult plan = planner_.calculateRoute(slope);
+  planning::PlanningResult plan = planner_.calculateRoute(*slope);
 
   controlService_.setSteeringAngle(plan.steeringAngle);
   controlService_.setThrottle(plan.throttle);
 
   if (debugInfoEnabled_) {
-    std::cout << "Angle: " << plan.steeringAngle << ". Lines: " << lines.size()
-              << std::endl;
+    std::cout << "Angle: " << plan.steeringAngle << "." << std::endl;
   }
 }
 

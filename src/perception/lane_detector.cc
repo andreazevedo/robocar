@@ -1,6 +1,7 @@
 #include "perception/lane_detector.h"
 
 #include <cmath>
+#include <optional>
 #include <vector>
 
 #include <opencv2/opencv.hpp>
@@ -8,7 +9,9 @@
 namespace robocar {
 namespace perception {
 
-double LaneDetector::getAverageSlope(const std::vector<cv::Vec4i>& lines) {
+namespace {
+
+double getAverageSlopeImpl(const std::vector<cv::Vec4i>& lines) {
   double rightTheta = 0.0;
   double leftTheta = 0.0;
   size_t rightLinesCount = 0;
@@ -53,12 +56,22 @@ double LaneDetector::getAverageSlope(const std::vector<cv::Vec4i>& lines) {
   return finalTheta;
 }
 
+}  // namespace
+
+std::optional<double> LaneDetector::getAverageSlope(const cv::Mat& frame) {
+  auto lines = detectLines(frame);
+  if (lines.empty()) {
+    return std::nullopt;
+  }
+  return getAverageSlopeImpl(lines);
+}
+
 std::vector<cv::Vec4i> LaneDetector::detectLines(const cv::Mat& frame) {
   // get only the part of the image relevat for lane detection
   int x = 0;
-  int y = frame.rows * 0.3;
+  int y = frame.rows * 0.1;
   int width = frame.cols;
-  int height = (frame.rows - y) * 0.7;
+  int height = (frame.rows - y) * 0.8;
   cv::Mat cropped = frame(cv::Rect(x, y, width, height));
 
   // convert to b&w
@@ -106,7 +119,7 @@ std::vector<cv::Vec4i> LaneDetector::detectLines(const cv::Mat& frame) {
                   cv::FONT_HERSHEY_SIMPLEX, 0.3, cv::Scalar(r, g, b), 1,
                   cv::LINE_AA);
     }
-    double theta = getAverageSlope(lines);
+    double theta = getAverageSlopeImpl(lines);
     std::string txt = "Theta: " + std::to_string(theta);
     cv::putText(withLines, txt, cv::Point(10, 10 * (lines.size() + 1)),
                 cv::FONT_HERSHEY_SIMPLEX, 0.5, cv::Scalar(255, 0, 0), 1,

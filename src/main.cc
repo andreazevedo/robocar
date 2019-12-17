@@ -58,7 +58,7 @@ int main(int argc, char *argv[]) {
       case 'c': {
         auto frame = car.camera().captureFrame();
         car.laneDetector().setSaveDebugImages(true);
-        car.laneDetector().detectLines(frame);
+        car.laneDetector().getAverageSlope(frame);
         cv::imwrite("bin/images/photo.jpg", frame);
         car.laneDetector().setSaveDebugImages(false);
       } break;
