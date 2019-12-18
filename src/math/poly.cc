@@ -7,9 +7,14 @@ namespace math {
 
 void polyfit(const cv::Mat& src_x, const cv::Mat& src_y, cv::Mat& dst,
              int order) {
-  CV_Assert((src_x.rows > 0) && (src_y.rows > 0) && (src_x.cols == 1) &&
-            (src_y.cols == 1) && (dst.cols == 1) && (dst.rows == (order + 1)) &&
-            (order >= 1));
+  CV_Assert(src_x.rows > 0);
+  CV_Assert(src_y.rows > 0);
+  CV_Assert(src_x.cols == 1);
+  CV_Assert(src_y.cols == 1);
+  CV_Assert(dst.cols == 1);
+  CV_Assert(dst.rows == (order + 1));
+  CV_Assert(order >= 1);
+
   cv::Mat X;
   X = cv::Mat::zeros(src_x.rows, order + 1, CV_32FC1);
   cv::Mat copy;
@@ -37,7 +42,7 @@ std::vector<double> polyfit(const std::vector<cv::Point>& src, int order) {
     src_y.at<double>(i, 0) = static_cast<double>(src[i].y);
   }
 
-  cv::Mat result;
+  cv::Mat result(2, 1, CV_32F);
   polyfit(src_x, src_y, result, order);
   return result;
 }

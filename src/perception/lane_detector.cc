@@ -24,19 +24,19 @@ LaneLine calcAverageLine(const std::vector<LaneLine>& lines) {
   return avg;
 }
 
-std::vector<cv::Vec4i> createPoints(const cv::Mat& frame,
-                                    const LaneLine& laneLine) {
-  int width = frame.cols;
-  int height = frame.rows;
-  int y1 = height;
-  int y2 = y1 * 0.5;
+cv::Vec4i createPoints(const LaneLine& laneLine, int width,
+                                    int height) {
+  const int y1 = height;
+  const int y2 = y1 * 0.5;
 
   // bound the coordinates within the frame
-  int x1 = std::max(-width, std::min(2 * width, int((y1 - laneLine.intercept) /
-                                                    laneLine.slope)));
-  int x2 = std::max(-width, std::min(2 * width, int((y2 - laneLine.intercept) /
-                                                    laneLine.slope)));
-  return {{x1, y1, x2, y2}};
+  const int x1 = std::max(
+      -width,
+      std::min(2 * width, int((y1 - laneLine.intercept) / laneLine.slope)));
+  const int x2 = std::max(
+      -width,
+      std::min(2 * width, int((y2 - laneLine.intercept) / laneLine.slope)));
+  return {x1, y1, x2, y2};
 }
 
 double getAverageSlopeImpl(const std::vector<cv::Vec4i>& lines) {
@@ -126,6 +126,11 @@ Lane getLaneImpl(const std::vector<cv::Vec4i>& lines, int frameWidth) {
   return lane;
 }
 
+void drawLine(cv::Mat& dstFrame, const cv::Vec4i& line, cv::Scalar color) {
+  cv::line(dstFrame, cv::Point(line[0], line[1]), cv::Point(line[2], line[3]),
+           color, 3, cv::LINE_AA);
+}
+
 }  // namespace
 
 std::optional<double> LaneDetector::getAverageSlope(const cv::Mat& frame) {
@@ -174,16 +179,14 @@ std::vector<cv::Vec4i> LaneDetector::detectLines(const cv::Mat& frame) {
     cv::imwrite("bin/images/blurred.jpg", blurred);
     cv::imwrite("bin/images/edged.jpg", edged);
 
-    cv::Mat withLines = gray;
+    cv::Mat withLines;
     cv::cvtColor(gray, withLines, cv::COLOR_GRAY2BGR);
     for (size_t i = 0; i < lines.size(); ++i) {
       const auto& l = lines[i];
       int r = (50 * (i + 0)) % 250;
       int g = (25 * (i + 0)) % 250;
       int b = (00 * (i + 0)) % 250;
-      cv::line(withLines, cv::Point(l[0], l[1]), cv::Point(l[2], l[3]),
-               cv::Scalar(r, g, b), 3, cv::LINE_AA);
-
+      drawLine(withLines, l, cv::Scalar(r, g, b));
       int x1 = l[0];
       int y1 = l[1];
       int x2 = l[2];
@@ -200,6 +203,21 @@ std::vector<cv::Vec4i> LaneDetector::detectLines(const cv::Mat& frame) {
                 cv::FONT_HERSHEY_SIMPLEX, 0.5, cv::Scalar(255, 0, 0), 1,
                 cv::LINE_AA);
     cv::imwrite("bin/images/with_lines.jpg", withLines);
+
+    Lane lane = getLaneImpl(lines, edged.cols);
+    cv::Mat withLinesTwo;
+    cv::cvtColor(gray, withLinesTwo, cv::COLOR_GRAY2BGR);
+    if (lane.left) {
+      auto toDraw =
+          createPoints(*lane.left, withLinesTwo.cols, withLinesTwo.rows);
+      drawLine(withLinesTwo, toDraw, cv::Scalar(255, 0, 0));
+    }
+    if (lane.right) {
+      auto toDraw =
+          createPoints(*lane.right, withLinesTwo.cols, withLinesTwo.rows);
+      drawLine(withLinesTwo, toDraw, cv::Scalar(0, 255, 0));
+    }
+    cv::imwrite("bin/images/with_lines_two.jpg", withLinesTwo);
   }
 
   return lines;
