@@ -34,12 +34,12 @@ void polyfit(const cv::Mat& src_x, const cv::Mat& src_y, cv::Mat& dst,
   W.copyTo(dst);
 }
 
-std::vector<double> polyfit(const std::vector<cv::Point>& src, int order) {
+std::vector<float> polyfit(const std::vector<cv::Point>& src, int order) {
   cv::Mat src_x(src.size(), 1, CV_32F);
   cv::Mat src_y(src.size(), 1, CV_32F);
   for (int i = 0; i < src.size(); i++) {
-    src_x.at<double>(i, 0) = static_cast<double>(src[i].x);
-    src_y.at<double>(i, 0) = static_cast<double>(src[i].y);
+    src_x.at<float>(i, 0) = static_cast<float>(src[i].x);
+    src_y.at<float>(i, 0) = static_cast<float>(src[i].y);
   }
 
   cv::Mat result(2, 1, CV_32F);
