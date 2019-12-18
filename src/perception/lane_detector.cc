@@ -1,6 +1,7 @@
 #include "perception/lane_detector.h"
 
 #include <cmath>
+#include <iostream>
 #include <optional>
 #include <vector>
 
@@ -24,10 +25,9 @@ LaneLine calcAverageLine(const std::vector<LaneLine>& lines) {
   return avg;
 }
 
-cv::Vec4i createPoints(const LaneLine& laneLine, int width,
-                                    int height) {
+cv::Vec4i createPoints(const LaneLine& laneLine, int width, int height) {
   const int y1 = height;
-  const int y2 = y1 * 0.5;
+  const int y2 = y1 * 0.3;
 
   // bound the coordinates within the frame
   const int x1 = std::max(
@@ -103,9 +103,9 @@ Lane getLaneImpl(const std::vector<cv::Vec4i>& lines, int frameWidth) {
       continue;
     }
     auto fit = math::polyfit({cv::Point(x1, y1), cv::Point(x2, y2)}, 1);
-    float slope = fit[0];
-    float intercept = fit[1];
-    if (slope > 0) {
+    float intercept = fit[0];
+    float slope = fit[1];
+    if (slope < 0) {
       if (x1 < leftLineEnd && x2 < leftLineEnd) {
         leftFit.emplace_back(LaneLine{slope, intercept});
       }
