@@ -42,7 +42,7 @@ std::vector<float> polyfit(const std::vector<cv::Point>& src, int order) {
     src_y.at<float>(i, 0) = static_cast<float>(src[i].y);
   }
 
-  cv::Mat result(2, 1, CV_32F);
+  cv::Mat result(order + 1, 1, CV_32F);
   polyfit(src_x, src_y, result, order);
   return result;
 }

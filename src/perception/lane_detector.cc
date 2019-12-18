@@ -102,10 +102,10 @@ Lane getLaneImpl(const std::vector<cv::Vec4i>& lines, int frameWidth) {
       // pretty much a horizontal line, ignore.
       continue;
     }
-    auto fit = math::polyfit({cv::Point(x1, x2), cv::Point(y1, y2)}, 1);
-    double slope = fit[0];
-    double intercept = fit[1];
-    if (slope < 0) {
+    auto fit = math::polyfit({cv::Point(x1, y1), cv::Point(x2, y2)}, 1);
+    float slope = fit[0];
+    float intercept = fit[1];
+    if (slope > 0) {
       if (x1 < leftLineEnd && x2 < leftLineEnd) {
         leftFit.emplace_back(LaneLine{slope, intercept});
       }
