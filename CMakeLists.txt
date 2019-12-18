@@ -8,6 +8,7 @@ project("robocar" VERSION 0.1.0 LANGUAGES CXX)
 
 # compiler options
 add_compile_options(-std=c++17)
+add_compile_options(-Wno-psabi)
 
 # add the src directory as include dir
 include_directories("${PROJECT_SOURCE_DIR}/src"
