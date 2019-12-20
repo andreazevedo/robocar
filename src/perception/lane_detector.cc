@@ -27,7 +27,7 @@ LaneLine calcAverageLine(const std::vector<LaneLine>& lines) {
 
 cv::Vec4i createPoints(const LaneLine& laneLine, int width, int height) {
   const int y1 = height;
-  const int y2 = y1 * 0.3;
+  const int y2 = y1 * 0.05;
 
   // bound the coordinates within the frame
   const int x1 = std::max(
