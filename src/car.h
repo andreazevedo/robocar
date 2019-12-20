@@ -30,7 +30,7 @@ class Car {
   control::ControlService& controlService() { return controlService_; }
 
  private:
-  static constexpr size_t kExecutionRateHz = 15;
+  static constexpr size_t kExecutionRateHz = 5;
 
   sensors::Camera camera_;
   perception::LaneDetector laneDetector_;

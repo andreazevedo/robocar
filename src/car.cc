@@ -29,22 +29,19 @@ void Car::loop() {
     return;
   }
 
-  auto frame = camera_.captureFrame();
-  std::optional<double> slope = laneDetector_.getAverageSlope(frame);
-  if (!slope) {
-    // no lines detected - probably the image is to blurry. Stop the car
-    controlService_.setSteeringAngle(0.0);
-    controlService_.setThrottle(0.0);
-    std::cout << "Couldn't compute slope!" << std::endl;
-    return;
-  }
-  planning::PlanningResult plan = planner_.calculateRoute(*slope);
+  auto frame = camera_.captureFrame();        // sense
+  auto lane = laneDetector_.getLane(frame);   // detect
+  auto plan = planner_.calculateRoute(lane);  // plan
 
+  // act
   controlService_.setSteeringAngle(plan.steeringAngle);
   controlService_.setThrottle(plan.throttle);
 
   if (debugInfoEnabled_) {
-    std::cout << "Angle: " << plan.steeringAngle << "." << std::endl;
+    std::cout << "LL: " << (lane.left ? 'Y' : 'N')
+              << ". RL: " << (lane.right ? 'Y' : 'N')
+              << ". Throttle: " << plan.throttle
+              << ". Angle: " << plan.steeringAngle << std::endl;
   }
 }
 
