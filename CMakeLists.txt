@@ -76,6 +76,7 @@ target_link_libraries(sensors ${OpenCV_LIBS} raspicam_cv)
 
 # perception
 set(PERCEPTION_FILES
+  src/perception/lane.h
   src/perception/lane_detector.cc
   src/perception/lane_detector.h
 )

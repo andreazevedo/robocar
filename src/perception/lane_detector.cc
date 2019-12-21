@@ -1,5 +1,6 @@
 #include "perception/lane_detector.h"
 
+#include <cassert>
 #include <cmath>
 #include <iostream>
 #include <optional>
@@ -8,11 +9,19 @@
 #include <opencv2/opencv.hpp>
 
 #include "math/poly.h"
+#include "perception/lane.h"
 
 namespace robocar {
 namespace perception {
 
 namespace {
+
+FrameSize getFrameSize(const cv::Mat& frame) {
+  assert(frame.cols > 0);
+  assert(frame.rows > 0);
+  return FrameSize{static_cast<size_t>(frame.cols),
+                   static_cast<size_t>(frame.rows)};
+}
 
 LaneLine calcAverageLine(const std::vector<LaneLine>& lines) {
   LaneLine avg{0.0, 0.0};
@@ -84,10 +93,10 @@ double getAverageSlopeImpl(const std::vector<cv::Vec4i>& lines) {
   return finalTheta;
 }
 
-Lane getLaneImpl(const std::vector<cv::Vec4i>& lines, int frameWidth) {
+Lane getLaneImpl(const std::vector<cv::Vec4i>& lines, FrameSize frameSize) {
   constexpr double lineBoundary = 1.0 / 3.0;
-  const size_t leftLineEnd = frameWidth - (frameWidth * lineBoundary);
-  const size_t rightLineStart = frameWidth * lineBoundary;
+  const size_t leftLineEnd = frameSize.width - (frameSize.width * lineBoundary);
+  const size_t rightLineStart = frameSize.width * lineBoundary;
 
   std::vector<LaneLine> leftFit;
   std::vector<LaneLine> rightFit;
@@ -117,6 +126,7 @@ Lane getLaneImpl(const std::vector<cv::Vec4i>& lines, int frameWidth) {
   }
 
   Lane lane;
+  lane.frameSize = frameSize;
   if (leftFit.size() > 0) {
     lane.left.emplace(calcAverageLine(leftFit));
   }
@@ -193,7 +203,7 @@ void saveDebugImages(const cv::Mat& original, const cv::Mat& gray,
               cv::LINE_AA);
   cv::imwrite("bin/images/with_lines.jpg", withLines);
 
-  Lane lane = getLaneImpl(lines, edges.cols);
+  Lane lane = getLaneImpl(lines, getFrameSize(edges));
   cv::Mat withLinesTwo;
   cv::cvtColor(gray, withLinesTwo, cv::COLOR_GRAY2BGR);
   if (lane.left) {
@@ -257,7 +267,7 @@ std::optional<double> LaneDetector::getAverageSlope(const cv::Mat& frame) {
 
 Lane LaneDetector::getLane(const cv::Mat& frame) {
   auto lines = detectLines(frame);
-  return getLaneImpl(lines, frame.cols);
+  return getLaneImpl(lines, getFrameSize(frame));
 }
 
 std::vector<cv::Vec4i> LaneDetector::detectLines(const cv::Mat& frame) {

@@ -5,24 +5,10 @@
 
 #include <opencv2/core/matx.hpp>
 
+#include "perception/lane.h"
+
 namespace robocar {
 namespace perception {
-
-/**
- * Represents one of the lines of the lane (either left or right line).
- */
-struct LaneLine {
-  double slope{0.0};
-  double intercept{0};
-};
-
-/**
- * A lane - it might be incomplete if e.g. we camera can't see one of the lines
- */
-struct Lane {
-  std::optional<LaneLine> left;
-  std::optional<LaneLine> right;
-};
 
 class LaneDetector {
  public:
