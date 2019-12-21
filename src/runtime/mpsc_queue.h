@@ -29,7 +29,7 @@ class MPSCQueue {
     size_t back = back_.load(std::memory_order_relaxed);
 
     while (true) {
-      size_t front = front_.load(std::memory_order_relaxed);
+      size_t front = front_.load(std::memory_order_acquire);
       size_t dist = getDistance(front, back);
 
       if (dist >= capacity()) {
@@ -67,7 +67,7 @@ class MPSCQueue {
     }
     queue_[idx].ready.store(false, std::memory_order_relaxed);
     item = std::move(queue_[idx].data);
-    front_.store(front + 1, std::memory_order_relaxed);
+    front_.store(front + 1, std::memory_order_release);
     return true;
   }
 

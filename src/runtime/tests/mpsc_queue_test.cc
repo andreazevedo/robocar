@@ -94,3 +94,45 @@ TEST(MPSCQueueTest, threads) {
 
   EXPECT_EQ(kNumProducerIterations * 2, numItemsPopped);
 }
+
+TEST(MPSCQueueTest, threads_bounded) {
+  constexpr size_t kNumProducerIterations = 50000;
+  constexpr size_t kQueueSize = 10;
+  MPSCQueue<Item> queue(kQueueSize);
+
+  std::atomic<bool> finishedProducing{false};
+  auto producerFn = [&queue, &finishedProducing](size_t initialVal1) {
+    size_t val1 = initialVal1;
+    for (int i = 0; i < kNumProducerIterations; ++i) {
+      Item item{val1, "my custom really long string that is not a small string",
+                val1 * 10};
+      queue.push(std::move(item));
+      val1 += 2;
+    }
+    finishedProducing = true;
+  };
+
+  size_t numItemsPopped = 0;
+  auto consumerFn = [&queue, &numItemsPopped, &finishedProducing]() {
+    Item item;
+    while (numItemsPopped < kQueueSize || !finishedProducing) {
+      if (!queue.pop(item)) {
+        continue;
+      }
+      ++numItemsPopped;
+      EXPECT_EQ("my custom really long string that is not a small string",
+                item.str1);
+      EXPECT_EQ(item.int2, item.int1 * 10);
+    }
+  };
+
+  std::thread oddProducer([&producerFn]() { producerFn(1); });
+  std::thread consumer(consumerFn);
+  std::thread evenProducer([&producerFn]() { producerFn(2); });
+
+  oddProducer.join();
+  evenProducer.join();
+  consumer.join();
+
+  EXPECT_GE(numItemsPopped, kQueueSize);
+}
