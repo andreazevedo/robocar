@@ -24,7 +24,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin)
 ##############
 # SANITIZERS #
 ##############
-option(ENABLE_ASAN "Enable thread sanitizer" ON)
+option(ENABLE_ASAN "Enable thread sanitizer" OFF)
 if (ENABLE_ASAN)
   add_compile_options(-fsanitize=address,undefined)
   add_compile_options(-fno-omit-frame-pointer)
