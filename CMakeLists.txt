@@ -9,6 +9,7 @@ project("robocar" VERSION 0.1.0 LANGUAGES CXX)
 # compiler options
 add_compile_options(-std=c++17)
 add_compile_options(-Wno-psabi)
+add_compile_options(-O2)
 
 # add the src directory as include dir
 include_directories("${PROJECT_SOURCE_DIR}/src"
@@ -18,6 +19,21 @@ include_directories("${PROJECT_SOURCE_DIR}/src"
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin)
+
+
+##############
+# SANITIZERS #
+##############
+option(ENABLE_ASAN "Enable thread sanitizer" ON)
+if (ENABLE_ASAN)
+  add_compile_options(-fsanitize=address,undefined)
+  add_compile_options(-fno-omit-frame-pointer)
+  add_compile_options(-fPIC)
+  add_compile_options(-pie)
+  add_compile_options(-O0)
+  add_compile_options(-g)
+  SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fsanitize=address,undefined")
+endif()
 
 ################
 # DEPENDENCIES #
