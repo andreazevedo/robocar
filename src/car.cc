@@ -10,7 +10,7 @@
 namespace robocar {
 
 Car::Car(bool debugInfoEnabled)
-    : camera_(180),
+    : camera_(180, true /* color */),
       thread_([this]() { loop(); }, kExecutionRateHz),
       debugInfoEnabled_(debugInfoEnabled) {
   controlService_.setMotorState(control::Motor::State::Forward);
@@ -42,6 +42,9 @@ void Car::loop() {
               << ". RL: " << (lane.right ? 'Y' : 'N')
               << ". Throttle: " << plan.throttle
               << ". Angle: " << plan.steeringAngle << std::endl;
+
+    static size_t loopCount = 0;
+    laneDetector_.setSaveDebugImages(++loopCount % 20 == 0);
   }
 }
 

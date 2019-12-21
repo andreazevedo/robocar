@@ -38,9 +38,9 @@ PlanningResult Planner::calculateRoute(perception::Lane lane) const {
 
   double angle;
   if (!lane.left) {
-    angle = 60.0;
+    angle = 80.0;
   } else if (!lane.right) {
-    angle = -60.0;
+    angle = -80.0;
   } else {
     angle = (lane.right->slope + lane.left->slope) * 90;
   }

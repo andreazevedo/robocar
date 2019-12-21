@@ -18,8 +18,9 @@ class Camera {
    *
    * @param cameraRotation  The rotation of the camera (e.g. use 180 if it's
    *                        upside down. Allowed values are 90, 180, and 270.
+   * @param color           True for colored images. False for gray images.
    */
-  Camera(size_t cameraRotation = 0);
+  Camera(size_t cameraRotation = 0, bool color = true);
 
   ~Camera();
 
@@ -32,6 +33,8 @@ class Camera {
 
   /**
    * Captures one image.
+   *
+   * @param color   True if the frame should be taken in color.
    */
   cv::Mat captureFrame();
 

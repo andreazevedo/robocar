@@ -33,19 +33,27 @@ cv::Mat rotate(const cv::Mat& frame, cv::RotateFlags rotateFlags) {
 
 }  // namespace
 
-Camera::Camera(size_t cameraRotation)
+Camera::Camera(size_t cameraRotation, bool color)
     : rotateFlags_(getRotateFlags(cameraRotation)) {
   // set rotation
 
   // set camera params
-  piCam_.set(cv::CAP_PROP_FORMAT, CV_8UC1);
+  if (color) {
+    piCam_.set(cv::CAP_PROP_FORMAT, CV_8UC3);
+  } else {
+    piCam_.set(cv::CAP_PROP_FORMAT, CV_8UC1);
+  }
   piCam_.set(cv::CAP_PROP_FRAME_WIDTH, 640);
   piCam_.set(cv::CAP_PROP_FRAME_HEIGHT, 480);
   piCam_.set(cv::CAP_PROP_FPS, 30);
   piCam_.set(cv::CAP_PROP_EXPOSURE, 30);
-  //piCam_.set(cv::CAP_PROP_BRIGHTNESS, 55);
-  //piCam_.set(cv::CAP_PROP_CONTRAST, 55);
-  //piCam_.set(cv::CAP_PROP_SATURATION, 50);
+  // piCam_.set(cv::CAP_PROP_BRIGHTNESS, 55);
+  // piCam_.set(cv::CAP_PROP_CONTRAST, 55);
+  // piCam_.set(cv::CAP_PROP_SATURATION, 50);
+  //if (color) {
+  //  piCam_.set(cv::CAP_PROP_WHITE_BALANCE_RED_V, -1);
+  //  piCam_.set(cv::CAP_PROP_WHITE_BALANCE_BLUE_U, -1);
+  //}
   if (!piCam_.open()) {
     throw std::runtime_error("Error opening the camera");
   }

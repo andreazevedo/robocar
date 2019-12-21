@@ -131,6 +131,120 @@ void drawLine(cv::Mat& dstFrame, const cv::Vec4i& line, cv::Scalar color) {
            color, 3, cv::LINE_AA);
 }
 
+cv::Mat cropLaneSection(const cv::Mat& frame) {
+  int x = 0;
+  int y = frame.rows * 0.4;
+  int width = frame.cols;
+  int height = (frame.rows - y) * 1.0;
+  cv::Mat cropped = frame(cv::Rect(x, y, width, height));
+  return cropped;
+}
+
+cv::Mat getEdges(const cv::Mat& gray) {
+  // blurry image
+  cv::Mat blurred;
+  cv::GaussianBlur(gray, blurred, cv::Size(3, 3), 0);
+
+  // crop the blurried image again (cause we might have a line on the left)
+  cv::Mat croppedBlurred =
+      blurred(cv::Rect(2, 0, blurred.cols - 2, blurred.rows));
+
+  // canny - get edges
+  cv::Mat edges;
+  cv::Canny(croppedBlurred, edges, 85, 85);
+
+  return edges;
+}
+
+std::vector<cv::Vec4i> getLines(const cv::Mat& edges) {
+  std::vector<cv::Vec4i> lines;
+  cv::HoughLinesP(edges, lines, 1, CV_PI / 180, 50, 50, 10);
+  return lines;
+}
+
+void saveDebugImages(const cv::Mat& original, const cv::Mat& gray,
+                     const cv::Mat& edges,
+                     const std::vector<cv::Vec4i>& lines) {
+  cv::imwrite("bin/images/original.jpg", original);
+  cv::imwrite("bin/images/gray.jpg", gray);
+  cv::imwrite("bin/images/edges.jpg", edges);
+
+  cv::Mat withLines;
+  cv::cvtColor(gray, withLines, cv::COLOR_GRAY2BGR);
+  for (size_t i = 0; i < lines.size(); ++i) {
+    const auto& l = lines[i];
+    int b = (50 * (i + 0)) % 250;
+    int g = (25 * (i + 0)) % 250;
+    int r = (00 * (i + 0)) % 250;
+    drawLine(withLines, l, cv::Scalar(b, g, r));
+    int x1 = l[0];
+    int y1 = l[1];
+    int x2 = l[2];
+    int y2 = l[3];
+    double theta = ::atan2((y2 - y1), (x2 - x1));
+    std::string txt = std::to_string(i) + ": " + std::to_string(theta);
+    cv::putText(withLines, txt, cv::Point(10, 10 * i), cv::FONT_HERSHEY_SIMPLEX,
+                0.3, cv::Scalar(b, g, r), 1, cv::LINE_AA);
+  }
+  double theta = getAverageSlopeImpl(lines);
+  std::string txt = "Theta: " + std::to_string(theta);
+  cv::putText(withLines, txt, cv::Point(10, 10 * (lines.size() + 1)),
+              cv::FONT_HERSHEY_SIMPLEX, 0.5, cv::Scalar(255, 0, 0), 1,
+              cv::LINE_AA);
+  cv::imwrite("bin/images/with_lines.jpg", withLines);
+
+  Lane lane = getLaneImpl(lines, edges.cols);
+  cv::Mat withLinesTwo;
+  cv::cvtColor(gray, withLinesTwo, cv::COLOR_GRAY2BGR);
+  if (lane.left) {
+    auto toDraw =
+        createPoints(*lane.left, withLinesTwo.cols, withLinesTwo.rows);
+    drawLine(withLinesTwo, toDraw, cv::Scalar(255, 0, 0));
+  }
+  if (lane.right) {
+    auto toDraw =
+        createPoints(*lane.right, withLinesTwo.cols, withLinesTwo.rows);
+    drawLine(withLinesTwo, toDraw, cv::Scalar(0, 255, 0));
+  }
+  cv::imwrite("bin/images/with_lines_two.jpg", withLinesTwo);
+}
+
+bool isGrayScale(const cv::Mat& frame) {
+  cv::Mat diffMat;
+  cv::Mat bgr[3];
+  cv::split(frame, bgr);
+  cv::absdiff(bgr[0], bgr[1], diffMat);
+
+  if (cv::countNonZero(diffMat)) {
+    return false;
+  }
+
+  cv::absdiff(bgr[0], bgr[2], diffMat);
+  return !cv::countNonZero(diffMat);
+}
+
+cv::Mat getGrayImage(const cv::Mat& frame) {
+  if (isGrayScale(frame)) {
+    return frame;
+  } else {
+    // cv::Mat gray;
+    // cv::cvtColor(frame, gray, cv::COLOR_BGR2GRAY);
+    // return gray;
+
+    // cv::Mat hsv;
+    // cv::cvtColor(frame, hsv, cv::COLOR_RGB2HSV);
+    // std::vector<cv::Mat> hsvPlanes;
+    // cv::split(hsv, hsvPlanes);
+    // return hsvPlanes[0];  // hue channel
+
+    cv::Mat hls;
+    cv::cvtColor(frame, hls, cv::COLOR_RGB2HLS);
+    std::vector<cv::Mat> hlsPlanes;
+    cv::split(hls, hlsPlanes);
+    return hlsPlanes[1];  // light channel
+  }
+}
+
 }  // namespace
 
 std::optional<double> LaneDetector::getAverageSlope(const cv::Mat& frame) {
@@ -148,76 +262,20 @@ Lane LaneDetector::getLane(const cv::Mat& frame) {
 
 std::vector<cv::Vec4i> LaneDetector::detectLines(const cv::Mat& frame) {
   // get only the part of the image relevat for lane detection
-  int x = 0;
-  int y = frame.rows * 0.1;
-  int width = frame.cols;
-  int height = (frame.rows - y) * 0.8;
-  cv::Mat cropped = frame(cv::Rect(x, y, width, height));
+  const cv::Mat cropped = cropLaneSection(frame);
 
   // convert to b&w
-  const cv::Mat& gray = cropped;  // it's already b&w
-  // cv::cvtColor(cropped, gray, cv::COLOR_BGR2GRAY);
+  const cv::Mat gray = getGrayImage(cropped);
 
-  // blurry image
-  cv::Mat blurred;
-  cv::GaussianBlur(gray, blurred, cv::Size(3, 3), 0);
-
-  // crop the blurried image again
-  cv::Mat croppedBlurred =
-      blurred(cv::Rect(2, 0, blurred.cols - 2, blurred.rows));
-
-  // canny - get edges
-  cv::Mat edged;
-  cv::Canny(croppedBlurred, edged, 85, 85);
+  // get just the edges in the image
+  const cv::Mat edges = getEdges(gray);
 
   // Hough lines
-  std::vector<cv::Vec4i> lines;
-  cv::HoughLinesP(edged, lines, 1, CV_PI / 180, 50, 50, 10);
+  std::vector<cv::Vec4i> lines = getLines(edges);
 
+  // save debug images
   if (saveDebugImages_) {
-    cv::imwrite("bin/images/gray.jpg", gray);
-    cv::imwrite("bin/images/blurred.jpg", blurred);
-    cv::imwrite("bin/images/edged.jpg", edged);
-
-    cv::Mat withLines;
-    cv::cvtColor(gray, withLines, cv::COLOR_GRAY2BGR);
-    for (size_t i = 0; i < lines.size(); ++i) {
-      const auto& l = lines[i];
-      int b = (50 * (i + 0)) % 250;
-      int g = (25 * (i + 0)) % 250;
-      int r = (00 * (i + 0)) % 250;
-      drawLine(withLines, l, cv::Scalar(b, g, r));
-      int x1 = l[0];
-      int y1 = l[1];
-      int x2 = l[2];
-      int y2 = l[3];
-      double theta = ::atan2((y2 - y1), (x2 - x1));
-      std::string txt = std::to_string(i) + ": " + std::to_string(theta);
-      cv::putText(withLines, txt, cv::Point(10, 10 * i),
-                  cv::FONT_HERSHEY_SIMPLEX, 0.3, cv::Scalar(b, g, r), 1,
-                  cv::LINE_AA);
-    }
-    double theta = getAverageSlopeImpl(lines);
-    std::string txt = "Theta: " + std::to_string(theta);
-    cv::putText(withLines, txt, cv::Point(10, 10 * (lines.size() + 1)),
-                cv::FONT_HERSHEY_SIMPLEX, 0.5, cv::Scalar(255, 0, 0), 1,
-                cv::LINE_AA);
-    cv::imwrite("bin/images/with_lines.jpg", withLines);
-
-    Lane lane = getLaneImpl(lines, edged.cols);
-    cv::Mat withLinesTwo;
-    cv::cvtColor(gray, withLinesTwo, cv::COLOR_GRAY2BGR);
-    if (lane.left) {
-      auto toDraw =
-          createPoints(*lane.left, withLinesTwo.cols, withLinesTwo.rows);
-      drawLine(withLinesTwo, toDraw, cv::Scalar(255, 0, 0));
-    }
-    if (lane.right) {
-      auto toDraw =
-          createPoints(*lane.right, withLinesTwo.cols, withLinesTwo.rows);
-      drawLine(withLinesTwo, toDraw, cv::Scalar(0, 255, 0));
-    }
-    cv::imwrite("bin/images/with_lines_two.jpg", withLinesTwo);
+    saveDebugImages(frame, gray, edges, lines);
   }
 
   return lines;
