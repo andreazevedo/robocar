@@ -102,10 +102,10 @@ Lane getLaneImpl(const std::vector<cv::Vec4i>& lines, FrameSize frameSize) {
   std::vector<LaneLine> rightFit;
 
   for (const auto& line : lines) {
-    int x1 = line[0];
-    int y1 = line[1];
-    int x2 = line[2];
-    int y2 = line[3];
+    size_t x1 = line[0];
+    size_t y1 = line[1];
+    size_t x2 = line[2];
+    size_t y2 = line[3];
     double theta = ::atan2((y2 - y1), (x2 - x1));
     if (isnan(theta) || ::fabs(theta) < 0.001) {
       // pretty much a horizontal line, ignore.

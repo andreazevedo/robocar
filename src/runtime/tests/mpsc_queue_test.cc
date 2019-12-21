@@ -62,7 +62,7 @@ TEST(MPSCQueueTest, threads) {
 
   auto producerFn = [&queue](size_t initialVal1) {
     size_t val1 = initialVal1;
-    for (int i = 0; i < kNumProducerIterations; ++i) {
+    for (size_t i = 0; i < kNumProducerIterations; ++i) {
       Item item{val1, "my custom really long string that is not a small string",
                 val1 * 10};
       EXPECT_TRUE(queue.push(std::move(item)));
@@ -103,7 +103,7 @@ TEST(MPSCQueueTest, threads_bounded) {
   std::atomic<bool> finishedProducing{false};
   auto producerFn = [&queue, &finishedProducing](size_t initialVal1) {
     size_t val1 = initialVal1;
-    for (int i = 0; i < kNumProducerIterations; ++i) {
+    for (size_t i = 0; i < kNumProducerIterations; ++i) {
       Item item{val1, "my custom really long string that is not a small string",
                 val1 * 10};
       queue.push(std::move(item));

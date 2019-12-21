@@ -398,7 +398,7 @@ namespace raspicam {
             userdata->length = length;
             userdata->imageCallback = userCallback;
             encoder_output_port->userdata = ( struct MMAL_PORT_USERDATA_T * ) userdata;
-            startCapture();
+            return startCapture();
         }
 
         int Private_Impl_Still::startCapture() {
@@ -602,7 +602,7 @@ namespace raspicam {
 
         void Private_Impl_Still::commitBrightness() {
             mmal_port_parameter_set_rational ( camera->control, MMAL_PARAMETER_BRIGHTNESS, ( MMAL_RATIONAL_T ) {
-                brightness, 100
+                static_cast<int32_t>(brightness), 100
             } );
         }
 
@@ -817,6 +817,7 @@ namespace raspicam {
             case RASPICAM_IMAGE_EFFECT_CARTOON:
                 return MMAL_PARAM_IMAGEFX_CARTOON;
             }
+            std::terminate(); // shouldn't reach this point.
         }
         
         //Returns an id of the camera. We assume the camera id is the one of the raspberry
