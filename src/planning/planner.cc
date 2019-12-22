@@ -81,8 +81,13 @@ Plan Planner::calculateRouteExperimental(perception::Lane lane) {
   auto plan = calculateRouteImpl(lane);
   if (::fabs(plan.steeringAngle()) >= 70.0) {
     if (math::equals(lastPlan_.steeringAngle(), plan.steeringAngle())) {
-      plan = Plan{0.5, plan.steeringAngle() / 3.0};
+      if (++lastPlanCount_ == 2) {
+        plan = Plan{0.4, 0.0};
+        lastPlanCount_ = 0;
+      }
     }
+  } else {
+    lastPlanCount_ = 0;
   }
   lastPlan_ = plan;
   return plan;

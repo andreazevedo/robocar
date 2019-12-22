@@ -44,6 +44,7 @@ class Planner {
 
   // for experimental calculator
   Plan lastPlan_{0.0, 0.0};
+  size_t lastPlanCount_{0};
 };
 
 }  // namespace planning
