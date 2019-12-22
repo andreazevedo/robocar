@@ -43,13 +43,7 @@ class Planner {
   size_t numIterations_{0};
 
   // for experimental calculator
-  static constexpr size_t kMaxBackupLaneAge = 6;
-  perception::Lane backupLane_;
-  size_t backupLaneIteration_{0};
-  bool isBackupLaneValid() const {
-    return !backupLane_.isEmpty() &&
-           (numIterations_ - backupLaneIteration_) < kMaxBackupLaneAge;
-  }
+  bool turnIgnored_{0};
 };
 
 }  // namespace planning

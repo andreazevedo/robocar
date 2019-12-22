@@ -37,9 +37,9 @@ Plan calculateRouteImpl(const perception::Lane& lane) {
 
   double angle;
   if (!lane.left) {
-    angle = 80.0;
+    angle = 75.0;
   } else if (!lane.right) {
-    angle = -80.0;
+    angle = -75.0;
   } else {
     angle = (lane.right->slope + lane.left->slope) * 90;
   }
@@ -66,6 +66,7 @@ bool isHighConfidenceLane(const perception::Lane& lane) {
   return isHighConfidenceLaneLine(*lane.left) &&
          isHighConfidenceLaneLine(*lane.right);
 }
+
 }  // namespace
 
 Planner::Planner() noexcept {}
@@ -77,21 +78,14 @@ Plan Planner::calculateRoute(perception::Lane lane) {
 
 Plan Planner::calculateRouteExperimental(perception::Lane lane) {
   ++numIterations_;
-  if (isHighConfidenceLane(lane)) {
-    backupLane_ = lane;
-    backupLaneIteration_ = numIterations_;
-  }
-
-  Plan plan = calculateRouteImpl(lane);
-  if (plan.isEmpty() && isBackupLaneValid()) {
-    std::cout << "Using backup lane!" << std::endl;
-    plan = calculateRouteImpl(backupLane_);
-  }
-
-  // update backup lane
-  if (isBackupLaneValid() && !plan.isEmpty()) {
-    backupLane_.left->slope += ((plan.steeringAngle() / 90.0) * 0.2);
-    backupLane_.right->slope += ((plan.steeringAngle() / 90.0) * 0.2);
+  auto plan = calculateRouteImpl(lane);
+  if (::fabs(plan.steeringAngle() >= 70.0)) {
+    if (!turnIgnored_) {
+      turnIgnored_ = true;
+      return Plan(0.4, 0.0);
+    }
+  } else {
+    turnIgnored_ = false;
   }
   return plan;
 }

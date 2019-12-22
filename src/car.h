@@ -32,7 +32,7 @@ class Car {
   void loopOnce();
 
  private:
-  static constexpr size_t kExecutionRateHz = 6;
+  static constexpr size_t kExecutionRateHz = 10;
 
   sensors::Camera camera_;
   perception::LaneDetector laneDetector_;
