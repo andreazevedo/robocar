@@ -1,7 +1,10 @@
 #include "planning/planner.h"
 
 #include <cmath>
+#include <iostream>
+#include <vector>
 
+#include "math/floating_point.h"
 #include "perception/lane_detector.h"
 #include "planning/plan.h"
 
@@ -48,13 +51,48 @@ Plan calculateRouteImpl(const perception::Lane& lane) {
   return Plan(getThrottle(0.4, angle), angle);
 }
 
+bool isHighConfidenceLaneLine(const perception::LaneLine& laneLine) {
+  constexpr double kMaxStdDev = 0.35;
+  constexpr size_t kMinLines = 2;
+  return laneLine.slopeStdDeviation <= kMaxStdDev &&
+         laneLine.numLines >= kMinLines;
+}
+
+bool isHighConfidenceLane(const perception::Lane& lane) {
+  if (!lane.left || !lane.right) {
+    return false;
+  }
+
+  return isHighConfidenceLaneLine(*lane.left) &&
+         isHighConfidenceLaneLine(*lane.right);
+}
 }  // namespace
 
-Planner::Planner() noexcept : plan_(Plan::emptyPlan()) {}
+Planner::Planner() noexcept {}
 
 Plan Planner::calculateRoute(perception::Lane lane) {
   ++numIterations_;
+  return calculateRouteImpl(lane);
+}
+
+Plan Planner::calculateRouteExperimental(perception::Lane lane) {
+  ++numIterations_;
+  if (isHighConfidenceLane(lane)) {
+    backupLane_ = lane;
+    backupLaneIteration_ = numIterations_;
+  }
+
   Plan plan = calculateRouteImpl(lane);
+  if (plan.isEmpty() && isBackupLaneValid()) {
+    std::cout << "Using backup lane!" << std::endl;
+    plan = calculateRouteImpl(backupLane_);
+  }
+
+  // update backup lane
+  if (isBackupLaneValid() && !plan.isEmpty()) {
+    backupLane_.left->slope += ((plan.steeringAngle() / 90.0) * 0.2);
+    backupLane_.right->slope += ((plan.steeringAngle() / 90.0) * 0.2);
+  }
   return plan;
 }
 

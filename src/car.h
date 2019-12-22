@@ -15,8 +15,8 @@ class Car {
  public:
   Car(bool debugInfoEnabled = false);
 
-  void enableAutonomy();
-  void disableAutonomy();
+  void startAutonomyLoop();
+  void stopAutonomyLoop();
 
   const sensors::Camera& camera() const { return camera_; }
   sensors::Camera& camera() { return camera_; }
@@ -28,6 +28,8 @@ class Car {
     return controlService_;
   }
   control::ControlService& controlService() { return controlService_; }
+
+  void loopOnce();
 
  private:
   static constexpr size_t kExecutionRateHz = 6;

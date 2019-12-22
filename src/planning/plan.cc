@@ -17,5 +17,16 @@ bool Plan::isEmpty() const {
   return math::isZero(throttle_) && math::isZero(steeringAngle_);
 }
 
+Plan operator+(const Plan& lhs, const Plan& rhs) {
+  return Plan(lhs.throttle() + rhs.throttle(),
+              lhs.steeringAngle() + rhs.steeringAngle());
+}
+Plan operator*(const Plan& plan, double mult) {
+  return Plan(plan.throttle() * mult, plan.steeringAngle() * mult);
+}
+Plan operator/(const Plan& plan, double div) {
+  return Plan(plan.throttle() / div, plan.steeringAngle() / div);
+}
+
 }  // namespace planning
 }  // namespace robocar

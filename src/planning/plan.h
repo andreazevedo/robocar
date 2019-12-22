@@ -21,5 +21,9 @@ class Plan {
   double steeringAngle_{0.0};
 };
 
+Plan operator+(const Plan& lhs, const Plan& rhs);
+Plan operator*(const Plan& lhs, double mult);
+Plan operator/(const Plan& plan, double div);
+
 }  // namespace planning
 }  // namespace robocar

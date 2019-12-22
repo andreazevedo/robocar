@@ -7,9 +7,11 @@ namespace math {
 
 constexpr double kEpsilon = 1e-5;
 
-double equals(double lhs, double rhs) { return ::fabs(lhs - rhs) < kEpsilon; }
+inline double equals(double lhs, double rhs) {
+  return ::fabs(lhs - rhs) < kEpsilon;
+}
 
-double isZero(double value) { return equals(value, 0.0); }
+inline double isZero(double value) { return equals(value, 0.0); }
 
 }  // namespace math
 }  // namespace robocar

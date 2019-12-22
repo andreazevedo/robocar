@@ -63,10 +63,17 @@ int main(int argc, char *argv[]) {
         car.laneDetector().setSaveDebugImages(false);
       } break;
       case 'm':
-        car.enableAutonomy();
+        car.startAutonomyLoop();
         break;
       case 'n':
-        car.disableAutonomy();
+        car.stopAutonomyLoop();
+        break;
+      case 'o':
+        car.laneDetector().setSaveDebugImages(true);
+        car.loopOnce();
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+        car.controlService().setThrottle(0.0);
+        car.laneDetector().setSaveDebugImages(false);
         break;
     }
   }

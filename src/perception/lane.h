@@ -15,6 +15,9 @@ struct FrameSize {
  * Represents one of the lines of the lane (either left or right line).
  */
 struct LaneLine {
+  // Negative slope means the top of the line is more to the right than bottom
+  // of the line.
+  // Usually left line has negative slope.
   double slope{0.0};
   double intercept{0.0};
 
@@ -33,6 +36,8 @@ struct Lane {
   FrameSize frameSize;
   std::optional<LaneLine> left;
   std::optional<LaneLine> right;
+
+  bool isEmpty() const { return !left && !right; }
 };
 
 }  // namespace perception
