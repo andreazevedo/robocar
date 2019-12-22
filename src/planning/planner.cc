@@ -37,9 +37,9 @@ Plan calculateRouteImpl(const perception::Lane& lane) {
 
   double angle;
   if (!lane.left) {
-    angle = 75.0;
+    angle = 80.0;
   } else if (!lane.right) {
-    angle = -75.0;
+    angle = -80.0;
   } else {
     angle = (lane.right->slope + lane.left->slope) * 90;
   }
@@ -79,14 +79,12 @@ Plan Planner::calculateRoute(perception::Lane lane) {
 Plan Planner::calculateRouteExperimental(perception::Lane lane) {
   ++numIterations_;
   auto plan = calculateRouteImpl(lane);
-  if (::fabs(plan.steeringAngle() >= 70.0)) {
-    if (!turnIgnored_) {
-      turnIgnored_ = true;
-      return Plan(0.4, 0.0);
+  if (::fabs(plan.steeringAngle()) >= 70.0) {
+    if (math::equals(lastPlan_.steeringAngle(), plan.steeringAngle())) {
+      plan = Plan{0.5, plan.steeringAngle() / 3.0};
     }
-  } else {
-    turnIgnored_ = false;
   }
+  lastPlan_ = plan;
   return plan;
 }
 

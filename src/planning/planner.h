@@ -43,7 +43,7 @@ class Planner {
   size_t numIterations_{0};
 
   // for experimental calculator
-  bool turnIgnored_{0};
+  Plan lastPlan_{0.0, 0.0};
 };
 
 }  // namespace planning
