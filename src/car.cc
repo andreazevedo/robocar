@@ -5,6 +5,7 @@
 #include <thread>
 
 #include "control/motor.h"
+#include "planning/plan.h"
 #include "runtime/service_thread.h"
 
 namespace robocar {
@@ -34,14 +35,14 @@ void Car::loop() {
   auto plan = planner_.calculateRoute(lane);  // plan
 
   // act
-  controlService_.setSteeringAngle(plan.steeringAngle);
-  controlService_.setThrottle(plan.throttle);
+  controlService_.setSteeringAngle(plan.steeringAngle());
+  controlService_.setThrottle(plan.throttle());
 
   if (debugInfoEnabled_) {
     std::cout << "LL: " << (lane.left ? 'Y' : 'N')
               << ". RL: " << (lane.right ? 'Y' : 'N')
-              << ". Throttle: " << plan.throttle
-              << ". Angle: " << plan.steeringAngle << std::endl;
+              << ". Throttle: " << plan.throttle()
+              << ". Angle: " << plan.steeringAngle() << std::endl;
 
     static size_t loopCount = 0;
     laneDetector_.setSaveDebugImages(++loopCount % 20 == 0);

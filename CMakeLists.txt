@@ -89,7 +89,8 @@ target_link_libraries(perception math runtime ${OpenCV_LIBS})
 set(PLANNING_FILES
   src/planning/planner.cc
   src/planning/planner.h
-  src/planning/planning_result.h
+  src/planning/plan.cc
+  src/planning/plan.h
 )
 add_library(planning ${PLANNING_FILES})
 target_link_libraries(planning runtime ${OpenCV_LIBS})

@@ -3,7 +3,7 @@
 #include <cmath>
 
 #include "perception/lane_detector.h"
-#include "planning/planning_result.h"
+#include "planning/plan.h"
 
 namespace robocar {
 namespace planning {
@@ -26,14 +26,10 @@ double getThrottle(double originalThrottle, double steeringAngle) {
   return std::min(throttle, 1.0);
 }
 
-}
-
-PlanningResult Planner::calculateRoute(perception::Lane lane) const {
-  PlanningResult result;
-
+Plan calculateRouteImpl(const perception::Lane& lane) {
   if (!lane.left && !lane.right) {
-    // no lane detected - can create a plan
-    return result;
+    // no lane detected - can't create a plan
+    return Plan::emptyPlan();
   }
 
   double angle;
@@ -49,24 +45,32 @@ PlanningResult Planner::calculateRoute(perception::Lane lane) const {
   angle = std::max(-90.0, angle);
 
   // throttle
-  result.throttle = getThrottle(0.4, angle);
-  result.steeringAngle = angle;
-  return result;
+  return Plan(getThrottle(0.4, angle), angle);
 }
 
-PlanningResult Planner::calculateRouteLegacy(double laneFinalSlope) const {
+}  // namespace
+
+Planner::Planner() noexcept : plan_(Plan::emptyPlan()) {}
+
+Plan Planner::calculateRoute(perception::Lane lane) {
+  ++numIterations_;
+  Plan plan = calculateRouteImpl(lane);
+  return plan;
+}
+
+Plan Planner::calculateRouteLegacy(double laneFinalSlope) {
+  ++numIterations_;
+
   double angle = laneFinalSlope * 90;
   angle *= -1;
   angle = std::min(90.0, angle);
   angle = std::max(-90.0, angle);
 
-  PlanningResult result;
-  result.throttle = 0.40;
+  double throttle = 0.40;
   if (::abs(angle) > 38) {
-    result.throttle = 0.50;
+    throttle = 0.50;
   }
-  result.steeringAngle = angle;
-  return result;
+  return Plan(throttle, angle);
 }
 
 }  // namespace planning
