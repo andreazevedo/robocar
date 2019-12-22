@@ -48,6 +48,7 @@ add_subdirectory(third_party/raspicam)
 ###########################
 # math
 set(MATH_FILES
+  src/math/floating_point.h
   src/math/poly.cc
   src/math/poly.h
 )
@@ -132,16 +133,17 @@ if (BUILD_TESTS)
       src/tests/test_main.cc)
     target_include_directories(
       ${test_name} PUBLIC ${LIBGTEST_INCLUDE_DIR})
-    target_link_libraries(${test_name} control runtime ${LIBGMOCK_LIBRARIES})
+    target_link_libraries(${test_name} math runtime ${LIBGMOCK_LIBRARIES})
     add_test(${test_name} bin/${test_name})
   endmacro(add_gtest)
+
+  # math tests
+  add_gtest(src/math/tests/math_test.cc MathTest)
 
   # runtime tests
   add_gtest(src/runtime/tests/mpsc_queue_test.cc MPSCQueueTest)
   add_gtest(src/runtime/tests/service_thread_test.cc ServiceThreadTest)
   add_gtest(
     src/runtime/tests/task_executor_thread_test.cc TaskExecutorThreadTest)
-
-  # control tests
 
 endif()
