@@ -9,6 +9,7 @@
 #include <opencv2/opencv.hpp>
 
 #include "math/poly.h"
+#include "math/statistics.h"
 #include "perception/lane.h"
 
 namespace robocar {
@@ -24,13 +25,16 @@ FrameSize getFrameSize(const cv::Mat& frame) {
 }
 
 LaneLine calcAverageLine(const std::vector<LaneLine>& lines) {
-  LaneLine avg{0.0, 0.0};
+  LaneLine avg;
   for (const auto& line : lines) {
     avg.slope += line.slope;
     avg.intercept += line.intercept;
   }
   avg.slope /= lines.size();
   avg.intercept /= lines.size();
+  avg.slopeStdDeviation = math::stdDeviation(
+      lines.begin(), lines.end(), [](const auto& line) { return line.slope; });
+  avg.numLines = lines.size();
   return avg;
 }
 

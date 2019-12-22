@@ -20,7 +20,10 @@ struct LaneLine {
 
   // The std deviation of the slope.
   // Can be used to judge confidence level (lower stddev == higher confidence)
-  double stdDeviation{0.0};
+  double slopeStdDeviation{0.0};
+
+  // Number of lines used to form this line
+  size_t numLines{0};
 };
 
 /**

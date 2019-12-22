@@ -42,7 +42,16 @@ void Car::loop() {
     std::cout << "LL: " << (lane.left ? 'Y' : 'N')
               << ". RL: " << (lane.right ? 'Y' : 'N')
               << ". Throttle: " << plan.throttle()
-              << ". Angle: " << plan.steeringAngle() << std::endl;
+              << ". Angle: " << plan.steeringAngle() << '\n';
+    if (lane.left) {
+      std::cout << "LL std-dev: " << lane.left->slopeStdDeviation << ". ";
+    }
+    if (lane.right) {
+      std::cout << "RL std-dev: " << lane.right->slopeStdDeviation;
+    }
+    if (lane.left || lane.right) {
+      std::cout << std::endl;
+    }
 
     static size_t loopCount = 0;
     laneDetector_.setSaveDebugImages(++loopCount % 20 == 0);
