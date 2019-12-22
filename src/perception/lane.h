@@ -17,6 +17,10 @@ struct FrameSize {
 struct LaneLine {
   double slope{0.0};
   double intercept{0.0};
+
+  // The std deviation of the slope.
+  // Can be used to judge confidence level (lower stddev == higher confidence)
+  double stdDeviation{0.0};
 };
 
 /**

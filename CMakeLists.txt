@@ -51,6 +51,7 @@ set(MATH_FILES
   src/math/floating_point.h
   src/math/poly.cc
   src/math/poly.h
+  src/math/statistics.h
 )
 add_library(math ${MATH_FILES})
 target_link_libraries(math ${OpenCV_LIBS})
