@@ -215,7 +215,7 @@ void saveDebugImages(const cv::Mat& original, const cv::Mat& gray,
         createPoints(*lane.left, withLinesTwo.cols, withLinesTwo.rows);
     drawLine(withLinesTwo, toDraw, cv::Scalar(255, 0, 0));
     std::string txt =
-        "Slope: " + std::to_string(lane.left->slope) +
+        "Left slope: " + std::to_string(lane.left->slope) +
         " - stddev: " + std::to_string(lane.left->slopeStdDeviation) +
         " - num: " + std::to_string(lane.left->numLines);
     cv::putText(withLinesTwo, txt, cv::Point(15, 30), cv::FONT_HERSHEY_SIMPLEX,
@@ -226,7 +226,7 @@ void saveDebugImages(const cv::Mat& original, const cv::Mat& gray,
         createPoints(*lane.right, withLinesTwo.cols, withLinesTwo.rows);
     drawLine(withLinesTwo, toDraw, cv::Scalar(0, 255, 0));
     std::string txt =
-        "Slope: " + std::to_string(lane.right->slope) +
+        "Right slope: " + std::to_string(lane.right->slope) +
         " - stddev: " + std::to_string(lane.right->slopeStdDeviation) +
         " - num: " + std::to_string(lane.right->numLines);
     cv::putText(withLinesTwo, txt, cv::Point(15, 60), cv::FONT_HERSHEY_SIMPLEX,
