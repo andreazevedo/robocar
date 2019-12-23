@@ -74,6 +74,20 @@ $ rm -r opencv && rm -r opencv_contrib
 $ sudo reboot
 ```
 
+
+#### 5) Tensforflow Lite
+Before running the following, make sure you are at the root of this project.
+```bash
+# Make sure you are at robocar root before running this.
+$ sudo apt-get -y install build-essential && \
+    cd third_party && \
+    git clone https://github.com/tensorflow/tensorflow && \
+    cd tensorflow && \
+    ./tensorflow/lite/tools/make/download_dependencies.sh && \
+    ./tensorflow/lite/tools/make/build_rpi_lib.sh
+```
+Note: Tensorflow folder is in .gitignore to avoid having it checked-in this repo. In the future we might consider having it as submodule.
+
 ### Build
 ```bash
 $ cmake .

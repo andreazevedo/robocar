@@ -41,6 +41,7 @@ endif()
 ################
 find_package(pigpio MODULE REQUIRED)
 find_package(OpenCV MODULE REQUIRED)
+find_package(tensorflow MODULE REQUIRED)
 add_subdirectory(third_party/raspicam)
 
 ###########################
@@ -117,7 +118,8 @@ set(ROBOCAR_FILES
   src/main.cc
 )
 add_executable(robocar ${ROBOCAR_FILES})
-target_link_libraries(robocar runtime sensors perception planning control)
+target_link_libraries(robocar
+  runtime sensors perception planning control ${tensorflow_LIBRARY})
 
 
 #########

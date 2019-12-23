@@ -49,3 +49,6 @@ Testing/
 
 # Binaries
 bin/
+
+# Tensorflow
+third_party/tensorflow/
