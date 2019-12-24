@@ -32,6 +32,20 @@ void testModel(robocar::sensors::Camera& camera) {
   cv::imwrite("bin/images/annotated.jpg", annotatedFrame);
 }
 
+void takeAndSavePicture(robocar::sensors::Camera& camera, int picId) {
+  static int batchId = ::time(nullptr);
+
+  constexpr size_t kPicSize = 300;
+  const auto frame = camera.captureFrame();
+  const int width = frame.cols;
+
+  const auto cropped = frame(cv::Rect(width - kPicSize, 0, kPicSize, kPicSize));
+
+  cv::imwrite("bin/images/train_" + std::to_string(batchId) +
+                  std::to_string(picId) + ".jpg",
+              cropped);
+}
+
 int main(int argc, char* argv[]) {
   robocar::control::globalPigpioInitialize();
 
@@ -101,6 +115,10 @@ int main(int argc, char* argv[]) {
         break;
       case 't':
         testModel(car.camera());
+        break;
+      case 'j':
+        static int picId = 0;
+        takeAndSavePicture(car.camera(), ++picId);
         break;
     }
   }
