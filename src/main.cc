@@ -1,14 +1,38 @@
 #include <cstdio>
 #include <cstdlib>
 #include <iostream>
+#include <memory>
+
+#include <opencv2/opencv.hpp>
 
 #include "car.h"
 #include "control/motor.h"
 #include "control/util.h"
+#include "inference/object_detector.h"
+#include "inference/util.h"
+#include "sensors/camera.h"
 
 using robocar::control::Motor;
 
-int main(int argc, char *argv[]) {
+void testModel(robocar::sensors::Camera& camera) {
+  static robocar::inference::ObjectDetector detector(
+      "models/coco_ssd_mobilenet/detect.tflite", true,
+      robocar::inference::loadLabels("models/coco_ssd_mobilenet/labelmap.txt"));
+
+  const auto frame = camera.captureFrame();
+  cv::Mat annotatedFrame;
+  auto objects = detector.runDetection(frame, &annotatedFrame);
+
+  for (const auto& obj : objects) {
+    std::cout << obj.className << "(" << obj.classId << "): " << obj.score
+              << " => [" << obj.location.top << ", " << obj.location.left
+              << ", " << obj.location.bottom << ", " << obj.location.right
+              << "]" << std::endl;
+  }
+  cv::imwrite("bin/images/annotated.jpg", annotatedFrame);
+}
+
+int main(int argc, char* argv[]) {
   robocar::control::globalPigpioInitialize();
 
   robocar::Car car(true /* log debug info */);
@@ -74,6 +98,9 @@ int main(int argc, char *argv[]) {
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
         car.controlService().setThrottle(0.0);
         car.laneDetector().setSaveDebugImages(false);
+        break;
+      case 't':
+        testModel(car.camera());
         break;
     }
   }

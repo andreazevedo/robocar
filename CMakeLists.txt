@@ -58,6 +58,17 @@ add_library(math ${MATH_FILES})
 target_link_libraries(math ${OpenCV_LIBS})
 set_target_properties(math PROPERTIES LINKER_LANGUAGE CXX)
 
+# inference
+set(INFERENCE_FILES
+  src/inference/object_detector.cc
+  src/inference/object_detector.h
+  src/inference/util.cc
+  src/inference/util.h
+)
+add_library(inference ${INFERENCE_FILES})
+target_link_libraries(inference ${OpenCV_LIBS} ${tensorflow_LIBRARY})
+set_target_properties(inference PROPERTIES LINKER_LANGUAGE CXX)
+
 # runtime
 set(RUNTIME_FILES
   src/runtime/mpsc_queue.h
@@ -119,7 +130,7 @@ set(ROBOCAR_FILES
 )
 add_executable(robocar ${ROBOCAR_FILES})
 target_link_libraries(robocar
-  runtime sensors perception planning control ${tensorflow_LIBRARY})
+  inference runtime sensors perception planning control)
 
 
 #########
