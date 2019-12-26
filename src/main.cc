@@ -35,15 +35,21 @@ void testModel(robocar::sensors::Camera& camera) {
 void takeAndSavePicture(robocar::sensors::Camera& camera, int picId) {
   static int batchId = ::time(nullptr);
 
-  constexpr size_t kPicSize = 300;
   const auto frame = camera.captureFrame();
   const int width = frame.cols;
+  const int height = frame.rows;
 
-  const auto cropped = frame(cv::Rect(width - kPicSize, 0, kPicSize, kPicSize));
+  // crop the largest possible square image (cut the left side of the pic).
+  const auto cropped = frame(cv::Rect(width - height, 0, height, height));
+
+  // resize of 300x300
+  constexpr size_t kPicSize = 300;
+  cv::Mat resized;
+  cv::resize(cropped, resized, cv::Size(kPicSize, kPicSize));
 
   cv::imwrite("bin/images/train_" + std::to_string(batchId) +
                   std::to_string(picId) + ".jpg",
-              cropped);
+              resized);
 }
 
 int main(int argc, char* argv[]) {
