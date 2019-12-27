@@ -85,7 +85,7 @@ $ python3 object_detection/model_main.py \
 ```bash
 $ cd PATH_TO_TENSORFLOW_MODELS/research/
 
-$ python3 object_detection/export_inference_graph.py \
+$ python3 object_detection/export_tflite_ssd_graph.py \
     --pipeline_config_path=[PIPELINE_CONFIG_PATH] \
     --trained_checkpoint_prefix=[PATH_TO_CHECKPOINT_WITHOUT_.INDEX]
     --output_directory=[PATH_TO_SAVE_EXPORTED_MODEL]
