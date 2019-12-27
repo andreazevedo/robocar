@@ -16,8 +16,9 @@ using robocar::control::Motor;
 
 void testModel(robocar::sensors::Camera& camera) {
   static robocar::inference::ObjectDetector detector(
-      "models/coco_ssd_mobilenet/detect.tflite", true,
-      robocar::inference::loadLabels("models/coco_ssd_mobilenet/labelmap.txt"));
+      "models/ssd_mobilenet_robocar/model.tflite", true,
+      robocar::inference::loadLabels(
+          "models/ssd_mobilenet_robocar/labelmap.txt"));
 
   const auto frame = camera.captureFrame();
   cv::Mat annotatedFrame;
