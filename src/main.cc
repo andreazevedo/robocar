@@ -103,7 +103,7 @@ int main(int argc, char* argv[]) {
       case 'c': {
         auto frame = car.camera().captureFrame();
         car.laneDetector().setSaveDebugImages(true);
-        car.laneDetector().getAverageSlope(frame);
+        car.laneDetector().getLane(frame);
         cv::imwrite("bin/images/photo.jpg", frame);
         car.laneDetector().setSaveDebugImages(false);
       } break;

@@ -21,7 +21,8 @@ class LaneDetector {
    *
    * @return  The average slope, or nullopt if a slope couldn't be calculated.
    */
-  std::optional<double> getAverageSlope(const cv::Mat& frame);
+  [[deprecated("Use getLane() instead")]] std::optional<double> getAverageSlope(
+      const cv::Mat& frame);
 
   /**
    * Get information about the lane.
