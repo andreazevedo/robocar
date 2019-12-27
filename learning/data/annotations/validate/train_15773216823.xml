@@ -1,0 +1,26 @@
+<annotation>
+	<folder>images</folder>
+	<filename>train_15773216823.jpg</filename>
+	<path>/home/andre/Projects/andreazevedo/robocar/learning/data/images/train_15773216823.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>300</width>
+		<height>300</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>stop sign</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>26</xmin>
+			<ymin>155</ymin>
+			<xmax>51</xmax>
+			<ymax>205</ymax>
+		</bndbox>
+	</object>
+</annotation>
