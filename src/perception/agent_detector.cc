@@ -44,11 +44,6 @@ AgentType getAgentType(int classId) {
   std::terminate();
 }
 
-float getDistanceCm(AgentType type, const inference::ObjectLocation& location,
-                    const FrameSize& frameSize) {
-  return 0.0;
-}
-
 }  // namespace
 
 AgentDetector::AgentDetector() : detector_(createDetector()) {}
@@ -63,7 +58,7 @@ std::vector<Agent> AgentDetector::detectAgents(const cv::Mat& frame) {
       auto type = getAgentType(obj.classId);
       agents.emplace_back(
           type, obj.location,
-          getDistanceCm(type, obj.location, getFrameSize(frame)));
+          getDistanceToAgentCm(type, getFrameSize(frame), obj.location));
     }
   }
   return agents;
