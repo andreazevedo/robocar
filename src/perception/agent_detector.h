@@ -2,7 +2,7 @@
 
 #include <vector>
 
-#include <opencv2/core/matx.hpp>
+#include <opencv2/core/mat.hpp>
 
 #include "inference/object_detector.h"
 #include "perception/agent.h"
@@ -12,10 +12,11 @@ namespace perception {
 
 class AgentDetector {
  public:
-   std::vector<Agent> detectAgents(const cv::Mat& frame);
+  AgentDetector();
+  std::vector<Agent> detectAgents(const cv::Mat& frame);
 
  private:
-   inference::ObjectDetector detector_;
+  inference::ObjectDetector detector_;
 };
 
 }  // namespace perception

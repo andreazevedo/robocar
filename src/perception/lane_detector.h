@@ -3,7 +3,7 @@
 #include <optional>
 #include <vector>
 
-#include <opencv2/core/matx.hpp>
+#include <opencv2/core/mat.hpp>
 
 #include "perception/lane.h"
 

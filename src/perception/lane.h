@@ -1,15 +1,9 @@
 #pragma once
 
+#include "perception/frame_size.h"
+
 namespace robocar {
 namespace perception {
-
-/**
- * The size of the frame that contains the lanes.
- */
-struct FrameSize {
-  size_t width{0};
-  size_t height{0};
-};
 
 /**
  * Represents one of the lines of the lane (either left or right line).

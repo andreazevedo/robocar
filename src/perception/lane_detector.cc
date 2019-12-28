@@ -11,18 +11,12 @@
 #include "math/poly.h"
 #include "math/statistics.h"
 #include "perception/lane.h"
+#include "perception/frame_size.h"
 
 namespace robocar {
 namespace perception {
 
 namespace {
-
-FrameSize getFrameSize(const cv::Mat& frame) {
-  assert(frame.cols > 0);
-  assert(frame.rows > 0);
-  return FrameSize{static_cast<size_t>(frame.cols),
-                   static_cast<size_t>(frame.rows)};
-}
 
 LaneLine calcAverageLine(const std::vector<LaneLine>& lines) {
   LaneLine avg;
