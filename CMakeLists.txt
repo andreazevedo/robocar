@@ -91,12 +91,15 @@ target_link_libraries(sensors ${OpenCV_LIBS} raspicam_cv)
 
 # perception
 set(PERCEPTION_FILES
+  src/perception/agent.h
+  src/perception/agent_detector.cc
+  src/perception/agent_detector.h
   src/perception/lane.h
   src/perception/lane_detector.cc
   src/perception/lane_detector.h
 )
 add_library(perception ${PERCEPTION_FILES})
-target_link_libraries(perception math runtime ${OpenCV_LIBS})
+target_link_libraries(perception math runtime inference ${OpenCV_LIBS})
 
 # planning
 set(PLANNING_FILES
