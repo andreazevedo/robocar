@@ -56,9 +56,10 @@ std::vector<Agent> AgentDetector::detectAgents(const cv::Mat& frame) {
   for (const auto& obj : objects) {
     if (obj.score >= kMinScore) {
       auto type = getAgentType(obj.classId);
-      agents.emplace_back(
-          type, obj.location,
-          getDistanceToAgentCm(type, getFrameSize(frame), obj.location));
+      agents.emplace_back(type, getFrameSize(frame), obj.location);
+
+      std::cout << "Agent found: " << obj.classId
+                << ". Distance: " << agents.back().distanceCm() << std::endl;
     }
   }
   return agents;

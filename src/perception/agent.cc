@@ -39,6 +39,12 @@ float getAgentDiagonalSizeInPixels(const FrameSize& frameSize,
 
 }  // namespace
 
+Agent::Agent(AgentType type, const FrameSize& frameSize,
+             const inference::ObjectLocation& location) noexcept
+    : type_(type),
+      location_(location),
+      distanceCm_(getDistanceToAgentCm(type, frameSize, location)) {}
+
 float getDistanceToAgentCm(AgentType type, const FrameSize& frameSize,
                            const inference::ObjectLocation& location) {
   const float agentRealWorldDiagonalSizeCm =

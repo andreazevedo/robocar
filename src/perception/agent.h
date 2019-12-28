@@ -16,9 +16,15 @@ enum class AgentType { StopSign };
  */
 class Agent {
  public:
-  Agent(AgentType type, inference::ObjectLocation location,
-        float distanceCm) noexcept
-      : type_(type), location_(location), distanceCm_(distanceCm) {}
+  /**
+   * Creates a new agent.
+   *
+   * @param type        The type of the agent.
+   * @param frameSize   The size of the frame where the agent was detected.
+   * @param location    The location of the agent with regards to the frame.
+   */
+  Agent(AgentType type, const FrameSize& frameSize,
+        const inference::ObjectLocation& location) noexcept;
 
   /**
    * The type of the agent.
