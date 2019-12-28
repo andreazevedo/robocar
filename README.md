@@ -4,7 +4,15 @@ A self-driving car built with raspberry pi and C++ 17.
 
 ## Hardware
 
-Coming soon.
+| Item              | Aprox. Price | Link                                                                                                    |
+|-------------------|--------------|---------------------------------------------------------------------------------------------------------|
+| Raspberry Pi      | $60          | [amazon](https://www.amazon.com/gp/product/B07V5JTMV9/ref=ppx_yo_dt_b_asin_title_o00_s00?ie=UTF8&psc=1) |
+| Car chassi        | $25          | [amazon](https://www.amazon.com/gp/product/B07F759T89/ref=ppx_yo_dt_b_asin_title_o01_s00?ie=UTF8&psc=1) |
+| Motor drive board | $5           | [amazon](https://www.amazon.com/gp/product/B01DG61YRM/ref=ppx_yo_dt_b_asin_title_o01_s01?ie=UTF8&psc=1) |
+| Wires             | $5           | [amazon](https://www.amazon.com/gp/product/B01LZF1ZSZ/ref=ppx_yo_dt_b_asin_title_o09_s00?ie=UTF8&psc=1) |
+| Camera            | $8           | [amazon](https://www.amazon.com/gp/product/B07QNSJ32M/ref=ppx_yo_dt_b_asin_title_o07_s00?ie=UTF8&psc=1) |
+| USB Power Supply  | $12          | [amazon](https://www.amazon.com/gp/product/B07V5FPNNZ/ref=ppx_yo_dt_b_asin_title_o06_s00?ie=UTF8&psc=1) |
+| Power bank        | $35          | [amazon](https://www.amazon.com/gp/product/B078S6LH8L/ref=ppx_yo_dt_b_asin_title_o05_s00?ie=UTF8&psc=1) |
 
 ## Software
 
