@@ -58,6 +58,13 @@ add_library(math ${MATH_FILES})
 target_link_libraries(math ${OpenCV_LIBS})
 set_target_properties(math PROPERTIES LINKER_LANGUAGE CXX)
 
+# time
+set(TIME_FILES
+  src/time/time.h
+)
+add_library(time ${TIME_FILES})
+set_target_properties(time PROPERTIES LINKER_LANGUAGE CXX)
+
 # inference
 set(INFERENCE_FILES
   src/inference/object.h
@@ -113,9 +120,11 @@ set(PLANNING_FILES
   src/planning/planner.h
   src/planning/plan.cc
   src/planning/plan.h
+  src/planning/stop_sign_handler.cc
+  src/planning/stop_sign_handler.h
 )
 add_library(planning ${PLANNING_FILES})
-target_link_libraries(planning runtime ${OpenCV_LIBS})
+target_link_libraries(planning time runtime ${OpenCV_LIBS})
 
 # control
 set(CONTROL_FILES

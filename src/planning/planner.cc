@@ -2,6 +2,7 @@
 
 #include <cmath>
 #include <iostream>
+#include <optional>
 #include <vector>
 
 #include "math/floating_point.h"
@@ -72,13 +73,22 @@ bool isHighConfidenceLane(const perception::Lane& lane) {
 
 Planner::Planner() noexcept {}
 
-Plan Planner::calculateRoute(perception::Lane lane) {
+Plan Planner::calculateRoute(const perception::Lane& lane) {
   ++numIterations_;
   return calculateRouteImpl(lane);
 }
 
-Plan Planner::calculateRouteWithSharpCurves(perception::Lane lane) {
+Plan Planner::calculateRoute(const perception::Obstacles& obstacles) {
   ++numIterations_;
+
+  if (stopSignHandler_.shouldStop(obstacles)) {
+    return Plan::emptyPlan();
+  }
+
+  return calculateRouteWithSharpCurves(obstacles.lane);
+}
+
+Plan Planner::calculateRouteWithSharpCurves(const perception::Lane& lane) {
   auto plan = calculateRouteImpl(lane);
   if (::fabs(plan.steeringAngle()) >= 70.0) {
     if (math::equals(lastPlan_.steeringAngle(), plan.steeringAngle())) {
@@ -93,10 +103,5 @@ Plan Planner::calculateRouteWithSharpCurves(perception::Lane lane) {
   lastPlan_ = plan;
   return plan;
 }
-
-Plan Planner::calculateRoute(perception::Obstacles obstacles) {
-  return calculateRouteWithSharpCurves(obstacles.lane);
-}
-
 }  // namespace planning
 }  // namespace robocar
