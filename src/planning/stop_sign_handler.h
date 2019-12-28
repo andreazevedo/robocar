@@ -17,7 +17,7 @@ class StopSignHandler {
 
  private:
   // The time the vehicle should wait at the stop sign before proceding.
-  static constexpr time::DurationMs kTimeToWait{2000};
+  static constexpr time::DurationMs kTimeToWait{1500};
 
   // The currently tracked stop sign.
   std::optional<perception::Agent> stopSign_;

@@ -40,7 +40,7 @@ bool StopSignHandler::shouldStop(const perception::Obstacles& obstacles) {
   if (stopSign_ && !stopSign) {
     // We were seeing a stop sign before, and now it's out of sight.
     // We might need to stop.
-    constexpr float kDistanceToStop = 10.0f;
+    constexpr float kDistanceToStop = 12.0f;
     float projectedDistance = getProjectedDistance(now);
     std::cout << "Projected distance: " << projectedDistance << std::endl;
     if (projectedDistance < kDistanceToStop) {
