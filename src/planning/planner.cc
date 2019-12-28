@@ -5,7 +5,8 @@
 #include <vector>
 
 #include "math/floating_point.h"
-#include "perception/lane_detector.h"
+#include "perception/lane.h"
+#include "perception/obstacles.h"
 #include "planning/plan.h"
 
 namespace robocar {
@@ -76,7 +77,7 @@ Plan Planner::calculateRoute(perception::Lane lane) {
   return calculateRouteImpl(lane);
 }
 
-Plan Planner::calculateRouteExperimental(perception::Lane lane) {
+Plan Planner::calculateRouteWithSharpCurves(perception::Lane lane) {
   ++numIterations_;
   auto plan = calculateRouteImpl(lane);
   if (::fabs(plan.steeringAngle()) >= 70.0) {
@@ -93,21 +94,9 @@ Plan Planner::calculateRouteExperimental(perception::Lane lane) {
   return plan;
 }
 
-Plan Planner::calculateRouteLegacy(double laneFinalSlope) {
-  ++numIterations_;
-
-  double angle = laneFinalSlope * 90;
-  angle *= -1;
-  angle = std::min(90.0, angle);
-  angle = std::max(-90.0, angle);
-
-  double throttle = 0.40;
-  if (::abs(angle) > 38) {
-    throttle = 0.50;
-  }
-  return Plan(throttle, angle);
+Plan Planner::calculateRoute(perception::Obstacles obstacles) {
+  return calculateRouteWithSharpCurves(obstacles.lane);
 }
 
 }  // namespace planning
 }  // namespace robocar
-

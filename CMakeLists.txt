@@ -100,6 +100,9 @@ set(PERCEPTION_FILES
   src/perception/lane.h
   src/perception/lane_detector.cc
   src/perception/lane_detector.h
+  src/perception/obstacles.h
+  src/perception/perception_service.cc
+  src/perception/perception_service.h
 )
 add_library(perception ${PERCEPTION_FILES})
 target_link_libraries(perception math runtime inference sensors ${OpenCV_LIBS})

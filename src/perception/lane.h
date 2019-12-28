@@ -1,5 +1,7 @@
 #pragma once
 
+#include <optional>
+
 #include "perception/frame_size.h"
 
 namespace robocar {

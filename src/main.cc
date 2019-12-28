@@ -102,10 +102,10 @@ int main(int argc, char* argv[]) {
         break;
       case 'c': {
         auto frame = car.camera().captureFrame();
-        car.laneDetector().setSaveDebugImages(true);
-        car.laneDetector().getLane(frame);
+        car.perceptionService().laneDetector().setSaveDebugImages(true);
+        car.perceptionService().laneDetector().getLane(frame);
         cv::imwrite("bin/images/photo.jpg", frame);
-        car.laneDetector().setSaveDebugImages(false);
+        car.perceptionService().laneDetector().setSaveDebugImages(false);
       } break;
       case 'm':
         car.startAutonomyLoop();
@@ -114,11 +114,11 @@ int main(int argc, char* argv[]) {
         car.stopAutonomyLoop();
         break;
       case 'o':
-        car.laneDetector().setSaveDebugImages(true);
+        car.perceptionService().laneDetector().setSaveDebugImages(true);
         car.loopOnce();
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
         car.controlService().setThrottle(0.0);
-        car.laneDetector().setSaveDebugImages(false);
+        car.perceptionService().laneDetector().setSaveDebugImages(false);
         break;
       case 't':
         testModel(car.camera());

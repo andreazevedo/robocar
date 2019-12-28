@@ -2,7 +2,8 @@
 
 #include <vector>
 
-#include "perception/lane_detector.h"
+#include "perception/lane.h"
+#include "perception/obstacles.h"
 #include "planning/plan.h"
 
 namespace robocar {
@@ -13,7 +14,7 @@ class Planner {
   Planner() noexcept;
 
   /**
-   * Calculate the next action of the car.
+   * Calculate the next action of the car, based only on a lane.
    *
    * @param lane  Information about the lane the car is in.
    *              @see perception::Lane
@@ -21,30 +22,20 @@ class Planner {
   Plan calculateRoute(perception::Lane lane);
 
   /**
-   * NOTE: this is experimental!
-   * Calculate the next action of the car.
+   * Calculate the next action of the car, based on all obstacles.
    *
-   * @param lane  Information about the lane the car is in.
-   *              @see perception::Lane
+   * @param obstacles   The obstacles detected by perception.
+   *                    @see perception::Obstacles.
    */
-  Plan calculateRouteExperimental(perception::Lane lane);
-
-  /**
-   * NOTE: calculateRoute() is strictly better.
-   * Calculate the next action of the car.
-   *
-   * @param laneFinalSlope  The average of the slope of the lines of the current
-   *                        lane.
-   *                        @see perception::LaneDetector::getAverageSlope()
-   */
-  Plan calculateRouteLegacy(double laneLinesSlopeSum);
+  Plan calculateRoute(perception::Obstacles obstacles);
 
  private:
   size_t numIterations_{0};
 
-  // for experimental calculator
+  // for the planner that deals with sharp curves.
   Plan lastPlan_{0.0, 0.0};
   size_t lastPlanCount_{0};
+  Plan calculateRouteWithSharpCurves(perception::Lane lane);
 };
 
 }  // namespace planning

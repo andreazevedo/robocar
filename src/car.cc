@@ -33,23 +33,22 @@ void Car::loop() {
 }
 
 void Car::loopOnce() {
-  auto frame = camera_.captureFrame();       // sense
-  auto lane = laneDetector_.getLane(frame);  // detect
-  // auto plan = planner_.calculateRoute(lane);  // plan
-  auto plan = planner_.calculateRouteExperimental(lane);
+  auto frame = camera_.captureFrame();                // sense
+  auto obstacles = perceptionService_.detect(frame);  // detect
+  auto plan = planner_.calculateRoute(obstacles);     // plan
 
   // act
   controlService_.setSteeringAngle(plan.steeringAngle());
   controlService_.setThrottle(plan.throttle());
 
   if (debugInfoEnabled_) {
-    std::cout << "LL: " << (lane.left ? 'Y' : 'N')
-              << ". RL: " << (lane.right ? 'Y' : 'N')
+    std::cout << "LL: " << (obstacles.lane.left ? 'Y' : 'N')
+              << ". RL: " << (obstacles.lane.right ? 'Y' : 'N')
               << ". Throttle: " << plan.throttle()
               << ". Angle: " << plan.steeringAngle() << std::endl;
 
     static size_t loopCount = 0;
-    laneDetector_.setSaveDebugImages(++loopCount % 20 == 0);
+    perceptionService_.laneDetector().setSaveDebugImages(++loopCount % 20 == 0);
   }
 }
 
