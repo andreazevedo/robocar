@@ -60,6 +60,7 @@ set_target_properties(math PROPERTIES LINKER_LANGUAGE CXX)
 
 # inference
 set(INFERENCE_FILES
+  src/inference/object.h
   src/inference/object_detector.cc
   src/inference/object_detector.h
   src/inference/util.cc
@@ -91,6 +92,7 @@ target_link_libraries(sensors ${OpenCV_LIBS} raspicam_cv)
 
 # perception
 set(PERCEPTION_FILES
+  src/perception/agent.cc
   src/perception/agent.h
   src/perception/agent_detector.cc
   src/perception/agent_detector.h
@@ -100,7 +102,7 @@ set(PERCEPTION_FILES
   src/perception/lane_detector.h
 )
 add_library(perception ${PERCEPTION_FILES})
-target_link_libraries(perception math runtime inference ${OpenCV_LIBS})
+target_link_libraries(perception math runtime inference sensors ${OpenCV_LIBS})
 
 # planning
 set(PLANNING_FILES
@@ -152,7 +154,8 @@ if (BUILD_TESTS)
       src/tests/test_main.cc)
     target_include_directories(
       ${test_name} PUBLIC ${LIBGTEST_INCLUDE_DIR})
-    target_link_libraries(${test_name} math runtime ${LIBGMOCK_LIBRARIES})
+    target_link_libraries(${test_name}
+      math runtime perception ${LIBGMOCK_LIBRARIES})
     add_test(${test_name} bin/${test_name})
   endmacro(add_gtest)
 
@@ -165,4 +168,6 @@ if (BUILD_TESTS)
   add_gtest(
     src/runtime/tests/task_executor_thread_test.cc TaskExecutorThreadTest)
 
+  # perception tests
+  add_gtest(src/perception/tests/agent_test.cc AgentTest)
 endif()

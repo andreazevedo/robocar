@@ -11,6 +11,8 @@
 #include "tensorflow/lite/model.h"
 #include "tensorflow/lite/optional_debug_tools.h"
 
+#include "inference/object.h"
+
 namespace robocar {
 namespace inference {
 

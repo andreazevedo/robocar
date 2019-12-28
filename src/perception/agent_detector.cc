@@ -44,7 +44,7 @@ AgentType getAgentType(int classId) {
   std::terminate();
 }
 
-float getDistanceCm(const inference::ObjectLocation& location,
+float getDistanceCm(AgentType type, const inference::ObjectLocation& location,
                     const FrameSize& frameSize) {
   return 0.0;
 }
@@ -60,8 +60,10 @@ std::vector<Agent> AgentDetector::detectAgents(const cv::Mat& frame) {
   std::vector<Agent> agents;
   for (const auto& obj : objects) {
     if (obj.score >= kMinScore) {
-      agents.emplace_back(getAgentType(obj.classId), obj.location,
-                          getDistanceCm(obj.location, getFrameSize(frame)));
+      auto type = getAgentType(obj.classId);
+      agents.emplace_back(
+          type, obj.location,
+          getDistanceCm(type, obj.location, getFrameSize(frame)));
     }
   }
   return agents;

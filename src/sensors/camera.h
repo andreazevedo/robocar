@@ -3,7 +3,10 @@
 #include <optional>
 
 #include <opencv2/core/base.hpp>
+
 #include "third_party/raspicam/src/raspicam_cv.h"
+
+#include "math/floating_point.h"
 
 namespace robocar {
 namespace sensors {
@@ -13,6 +16,31 @@ namespace sensors {
  */
 class Camera {
  public:
+  // Resolution of the pictures taken.
+  static constexpr size_t kWidth = 640;
+  static constexpr size_t kHeight = 480;
+
+  // These values are from specifications + experimentation.
+  static constexpr float kFocalLengthMm = 2.4f;
+  static constexpr float kSensorSizeDiagonalMm =
+      math::sqrt(math::pow2(3.67f) + math::pow2(2.74f));
+  static constexpr float kSensorSizeDiagonalPixels =
+      math::sqrt(math::pow2(kWidth) + math::pow2(kHeight));
+
+  /**
+   * Calculates the distance from the camera to the object, in millimeters.
+   *
+   * @param realWorldDiagonalSizeMm     The size of the diagonal of the object,
+   *                                    in millimeters.
+   * @param inCameraDiagonalSizePixels  The size of the diagonal of the object
+   *                                    when seen in the camera, in pixels.
+   *
+   * @return  The approximate distance from the camera to the object,
+   *          in millimeters.
+   */
+  static float distanceToObjectMm(float realWorldDiagonalSizeMm,
+                                  float inCameraDiagonalSizePixels);
+
   /**
    * Constructs the camera and gets it ready to be used.
    *
