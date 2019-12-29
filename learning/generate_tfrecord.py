@@ -26,8 +26,15 @@ import argparse
 def class_text_to_int(row_label):
     if row_label == 'stop sign':
         return 1
+    elif row_label == 'traffic light red':
+        return 2
+    elif row_label == 'traffic light green':
+        return 3
     else:
-        None
+        raise Exception(
+                'Invalid class "{}". '
+                'Please update the class_text_to_int() '
+                'function in generate_tfrecord.py file.'.format(row_label))
 
 
 def split(df, group):

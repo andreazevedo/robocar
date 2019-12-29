@@ -1,1 +1,3 @@
 stop sign
+traffic light red
+traffic light green

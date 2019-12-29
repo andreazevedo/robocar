@@ -66,6 +66,10 @@ $ python3 generate_tfrecord.py --input_csv=data/validate.csv \
   --output_tfrecord=data/validate.record
 ```
 
+Note: if you get an error saying `ModuleNotFoundError: No module named
+'object_detection'`, you have to update your `PYTHONPATH` again. Check step
+`2) Install tensorflow models` above for more details.
+
 ### 5) Update config
 Update `data/models/ssd_mobilenet_v2_quantized.config` with your path.
 
@@ -80,6 +84,10 @@ $ python3 object_detection/model_main.py \
     --sample_1_of_n_eval_examples=1 \
     --alsologtostderr
 ```
+Note: `[PIPILINE_CONFIG_PATH]` is
+`[PATH_TO_ROBOCAR]/learning/data/ssd_mobilenet_v2_quantized.config`, and
+`[MODEL_DIR]` is
+`[PATH_TO_ROBOCAR]/learning/data/models/ssd_mobilenet_v2_quantized`.
 
 ### 7) Export frozen graph for tflite
 ```bash
@@ -87,8 +95,8 @@ $ cd PATH_TO_TENSORFLOW_MODELS/research/
 
 $ python3 object_detection/export_tflite_ssd_graph.py \
     --pipeline_config_path=[PIPELINE_CONFIG_PATH] \
-    --trained_checkpoint_prefix=[PATH_TO_CHECKPOINT_WITHOUT_.INDEX]
-    --output_directory=[PATH_TO_SAVE_EXPORTED_MODEL]
+    --trained_checkpoint_prefix=[PATH_TO_CHECKPOINT_WITHOUT_.INDEX] \
+    --output_directory=[PATH_TO_SAVE_EXPORTED_MODEL] \
     --add_postprocessing_op=true
 ```
 

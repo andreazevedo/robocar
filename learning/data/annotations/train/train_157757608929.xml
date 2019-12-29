@@ -1,0 +1,26 @@
+<annotation>
+	<folder>images</folder>
+	<filename>train_157757608929.jpg</filename>
+	<path>/home/andre/Projects/andreazevedo/robocar/learning/data/images/train_157757608929.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>300</width>
+		<height>300</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>traffic light green</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>160</xmin>
+			<ymin>60</ymin>
+			<xmax>188</xmax>
+			<ymax>141</ymax>
+		</bndbox>
+	</object>
+</annotation>

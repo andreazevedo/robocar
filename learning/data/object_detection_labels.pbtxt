@@ -2,3 +2,11 @@ item {
   id: 1
   name: 'stop sign'
 }
+item {
+  id: 2
+  name: 'traffic light red'
+}
+item {
+  id: 3
+  name: 'traffic light green'
+}
