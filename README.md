@@ -14,7 +14,7 @@ The following table contains the basic components necessary for the car.
 |-------------------|--------------|---------------------------------------------------------------------------------------------------------|
 | Raspberry Pi      | $60          | [amazon](https://www.amazon.com/gp/product/B07V5JTMV9/ref=ppx_yo_dt_b_asin_title_o00_s00?ie=UTF8&psc=1) |
 | Car chassi        | $25          | [amazon](https://www.amazon.com/gp/product/B07F759T89/ref=ppx_yo_dt_b_asin_title_o01_s00?ie=UTF8&psc=1) |
-| Motor drive board | $5           | [amazon](https://www.amazon.com/gp/product/B01DG61YRM/ref=ppx_yo_dt_b_asin_title_o01_s01?ie=UTF8&psc=1) |
+| Actuator          | $5           | [amazon](https://www.amazon.com/gp/product/B01DG61YRM/ref=ppx_yo_dt_b_asin_title_o01_s01?ie=UTF8&psc=1) |
 | Wires             | $5           | [amazon](https://www.amazon.com/gp/product/B01LZF1ZSZ/ref=ppx_yo_dt_b_asin_title_o09_s00?ie=UTF8&psc=1) |
 | Camera            | $8           | [amazon](https://www.amazon.com/gp/product/B07QNSJ32M/ref=ppx_yo_dt_b_asin_title_o07_s00?ie=UTF8&psc=1) |
 | USB Power Supply  | $12          | [amazon](https://www.amazon.com/gp/product/B07V5FPNNZ/ref=ppx_yo_dt_b_asin_title_o06_s00?ie=UTF8&psc=1) |
