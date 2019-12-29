@@ -6,6 +6,7 @@
 #include "perception/obstacles.h"
 #include "planning/plan.h"
 #include "planning/stop_sign_handler.h"
+#include "planning/traffic_light_handler.h"
 
 namespace robocar {
 namespace planning {
@@ -34,8 +35,9 @@ class Planner {
   // Number of iterations of planner so far.
   size_t numIterations_{0};
 
-  // Handles stop signs.
+  // Obstacles handlers
   StopSignHandler stopSignHandler_;
+  TrafficLightHandler trafficLightHandler_;
 
   // for the planner that deals with sharp curves.
   Plan lastPlan_{0.0, 0.0};

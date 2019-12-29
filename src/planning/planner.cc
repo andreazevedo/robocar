@@ -84,6 +84,9 @@ Plan Planner::calculateRoute(const perception::Obstacles& obstacles) {
   if (stopSignHandler_.shouldStop(obstacles)) {
     return Plan::emptyPlan();
   }
+  if (trafficLightHandler_.shouldStop(obstacles)) {
+    return Plan::emptyPlan();
+  }
 
   return calculateRouteWithSharpCurves(obstacles.lane);
 }
