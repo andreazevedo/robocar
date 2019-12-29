@@ -15,13 +15,23 @@ namespace {
 
 float getAgentRealWorldDiagonalSizeCm(AgentType type) {
   switch (type) {
-    case AgentType::StopSign:
+    case AgentType::StopSign: {
       constexpr float kStopSignWidthCm = 2.8f;
       constexpr float kStopSignHeightCm = 6.4f;
       constexpr float kStopSignDiagonalSizeCm =
           math::sqrt((kStopSignWidthCm * kStopSignWidthCm) +
                      (kStopSignHeightCm * kStopSignHeightCm));
       return kStopSignDiagonalSizeCm;
+    }
+    case AgentType::TrafficLightRed:
+    case AgentType::TrafficLightGreen: {
+      constexpr float kTrafficLightWidthCm = 2.8f;
+      constexpr float kTrafficLightHeightCm = 7.4f;
+      constexpr float kTrafficLightDiagonalSizeCm =
+          math::sqrt((kTrafficLightWidthCm * kTrafficLightWidthCm) +
+                     (kTrafficLightHeightCm * kTrafficLightHeightCm));
+      return kTrafficLightDiagonalSizeCm;
+    }
   }
   std::cerr << "Unpexpected agent type!" << std::endl;
   std::terminate();

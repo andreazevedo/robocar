@@ -9,7 +9,7 @@ namespace perception {
 /**
  * The type of the agent.
  */
-enum class AgentType { StopSign };
+enum class AgentType { StopSign, TrafficLightRed, TrafficLightGreen };
 
 /**
  * An agent that the autonomous vehicle needs to track.

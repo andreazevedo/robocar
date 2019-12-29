@@ -116,6 +116,8 @@ target_link_libraries(perception math runtime inference sensors ${OpenCV_LIBS})
 
 # planning
 set(PLANNING_FILES
+  src/planning/agent_tracker.cc
+  src/planning/agent_tracker.h
   src/planning/planner.cc
   src/planning/planner.h
   src/planning/plan.cc
