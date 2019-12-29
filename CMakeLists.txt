@@ -124,6 +124,8 @@ set(PLANNING_FILES
   src/planning/plan.h
   src/planning/stop_sign_handler.cc
   src/planning/stop_sign_handler.h
+  src/planning/traffic_light_handler.cc
+  src/planning/traffic_light_handler.h
 )
 add_library(planning ${PLANNING_FILES})
 target_link_libraries(planning time runtime ${OpenCV_LIBS})

@@ -1,6 +1,5 @@
 #include "planning/stop_sign_handler.h"
 
-#include <cassert>
 #include <iostream>
 
 #include "perception/obstacles.h"
@@ -17,6 +16,7 @@ bool StopSignHandler::shouldStop(const perception::Obstacles& obstacles) {
   if (stopped_) {
     if (time::calculateDuration(stoppedAt_, now) >= kTimeToWait) {
       stopped_ = false;
+      stopSign_.reset();
       return false;
     }
     return true;
