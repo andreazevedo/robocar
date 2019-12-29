@@ -10,24 +10,24 @@ A self-driving car built with raspberry pi and C++ 17.
 
 The following table contains the basic components necessary for the car.
 
-| Item              | Aprox. Price | Link                                                                                                    |
-|-------------------|--------------|---------------------------------------------------------------------------------------------------------|
-| Raspberry Pi      | $60          | [amazon](https://www.amazon.com/gp/product/B07V5JTMV9/ref=ppx_yo_dt_b_asin_title_o00_s00?ie=UTF8&psc=1) |
-| Car chassi        | $25          | [amazon](https://www.amazon.com/gp/product/B07F759T89/ref=ppx_yo_dt_b_asin_title_o01_s00?ie=UTF8&psc=1) |
-| Actuator          | $5           | [amazon](https://www.amazon.com/gp/product/B01DG61YRM/ref=ppx_yo_dt_b_asin_title_o01_s01?ie=UTF8&psc=1) |
-| Wires             | $5           | [amazon](https://www.amazon.com/gp/product/B01LZF1ZSZ/ref=ppx_yo_dt_b_asin_title_o09_s00?ie=UTF8&psc=1) |
-| Camera            | $8           | [amazon](https://www.amazon.com/gp/product/B07QNSJ32M/ref=ppx_yo_dt_b_asin_title_o07_s00?ie=UTF8&psc=1) |
-| USB Power Supply  | $12          | [amazon](https://www.amazon.com/gp/product/B07V5FPNNZ/ref=ppx_yo_dt_b_asin_title_o06_s00?ie=UTF8&psc=1) |
-| Power bank        | $35          | [amazon](https://www.amazon.com/gp/product/B078S6LH8L/ref=ppx_yo_dt_b_asin_title_o05_s00?ie=UTF8&psc=1) |
+| Item              | Approx. Price | Link                                                                                                    |
+|-------------------|---------------|---------------------------------------------------------------------------------------------------------|
+| Raspberry Pi      | $60           | [amazon](https://www.amazon.com/gp/product/B07V5JTMV9/ref=ppx_yo_dt_b_asin_title_o00_s00?ie=UTF8&psc=1) |
+| Car chassi        | $25           | [amazon](https://www.amazon.com/gp/product/B07F759T89/ref=ppx_yo_dt_b_asin_title_o01_s00?ie=UTF8&psc=1) |
+| Actuator          | $5            | [amazon](https://www.amazon.com/gp/product/B01DG61YRM/ref=ppx_yo_dt_b_asin_title_o01_s01?ie=UTF8&psc=1) |
+| Wires             | $5            | [amazon](https://www.amazon.com/gp/product/B01LZF1ZSZ/ref=ppx_yo_dt_b_asin_title_o09_s00?ie=UTF8&psc=1) |
+| Camera            | $8            | [amazon](https://www.amazon.com/gp/product/B07QNSJ32M/ref=ppx_yo_dt_b_asin_title_o07_s00?ie=UTF8&psc=1) |
+| USB Power Supply  | $12           | [amazon](https://www.amazon.com/gp/product/B07V5FPNNZ/ref=ppx_yo_dt_b_asin_title_o06_s00?ie=UTF8&psc=1) |
+| Power bank        | $35           | [amazon](https://www.amazon.com/gp/product/B078S6LH8L/ref=ppx_yo_dt_b_asin_title_o05_s00?ie=UTF8&psc=1) |
 
 #### Others
 
-| Item                    | Aprox. Price | Link                                                                                                    |
-|-------------------------|--------------|---------------------------------------------------------------------------------------------------------|
-| Additional wires        | $10          | [amazon](https://www.amazon.com/gp/product/B07CWP7HPT/ref=ppx_yo_dt_b_asin_title_o02_s00?ie=UTF8&psc=1) |
-| Soldering Iron          | $15          | [amazon](https://www.amazon.com/gp/product/B06XZ31W3M/ref=ppx_yo_dt_b_asin_title_o02_s00?ie=UTF8&psc=1) |
-| Traffic Signs           | $12          | [amazon](https://www.amazon.com/gp/product/B0006KQIX2/ref=ppx_yo_dt_b_asin_title_o04_s00?ie=UTF8&psc=1) |
-| Tape (for making lanes) | $10          | [amazon](https://www.amazon.com/AmazonBasics-Masking-Tape-Inch-Rolls/dp/B07QHSKGMH/ref=sxin_3_ac_d_rm)  |
+| Item                    | Approx. Price | Link                                                                                                    |
+|-------------------------|---------------|---------------------------------------------------------------------------------------------------------|
+| Additional wires        | $10           | [amazon](https://www.amazon.com/gp/product/B07CWP7HPT/ref=ppx_yo_dt_b_asin_title_o02_s00?ie=UTF8&psc=1) |
+| Soldering Iron          | $15           | [amazon](https://www.amazon.com/gp/product/B06XZ31W3M/ref=ppx_yo_dt_b_asin_title_o02_s00?ie=UTF8&psc=1) |
+| Traffic Signs           | $12           | [amazon](https://www.amazon.com/gp/product/B0006KQIX2/ref=ppx_yo_dt_b_asin_title_o04_s00?ie=UTF8&psc=1) |
+| Tape (for making lanes) | $10           | [amazon](https://www.amazon.com/AmazonBasics-Masking-Tape-Inch-Rolls/dp/B07QHSKGMH/ref=sxin_3_ac_d_rm)  |
 
 ## Software
 
