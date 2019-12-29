@@ -82,10 +82,10 @@ $ wget -O opencv.tar.gz https://github.com/opencv/opencv/archive/4.1.2.tar.gz &&
         -D BUILD_TESTS=OFF \
         -D OPENCV_ENABLE_NONFREE=ON \
         -D INSTALL_PYTHON_EXAMPLES=OFF \
-        -D BUILD_EXAMPLES=OFF .. &&
-    make -j4 &&
-    sudo make install &&
-    sudo ldconfig &&
+        -D BUILD_EXAMPLES=OFF .. && \
+    make -j4 && \
+    sudo make install && \
+    sudo ldconfig && \
     sudo apt-get update
 
 # Clean up downloads
