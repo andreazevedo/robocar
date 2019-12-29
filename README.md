@@ -109,7 +109,8 @@ $ sudo apt-get -y install build-essential && \
     ./tensorflow/lite/tools/make/download_dependencies.sh && \
     ./tensorflow/lite/tools/make/build_rpi_lib.sh
 ```
-Note: Tensorflow folder is in .gitignore to avoid having it checked-in this repo. In the future we might consider having it as submodule.
+Note: Tensorflow folder is in .gitignore to avoid having it checked-in nto this
+repo. In the future we might consider having it as submodule.
 
 ### Build
 ```bash
@@ -127,5 +128,5 @@ $ make test
 ### Run
 The binary will be in the `bin/` directory:
 ```bash
-$ bin/robocar
+$ sudo bin/robocar
 ```
