@@ -71,7 +71,10 @@ Note: if you get an error saying `ModuleNotFoundError: No module named
 `2) Install tensorflow models` above for more details.
 
 ### 5) Update config
-Update `data/models/ssd_mobilenet_v2_quantized.config` with your path.
+ - Update `data/models/ssd_mobilenet_v2_quantized.config` with your path.
+ - Update `data/models/ssd_mobilenet_v2_quantized.config` with the number of
+ classes in your model. Search for `num_classes`.
+ - Update `data/object_detection_labels.pbtxt` with your classes.
 
 ### 6) Train the model
 ```bash
