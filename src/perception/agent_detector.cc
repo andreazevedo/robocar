@@ -40,6 +40,12 @@ AgentType getAgentType(int classId) {
   if (classId == 0) {
     return AgentType::StopSign;
   }
+  if (classId == 1) {
+    return AgentType::TrafficLightRed;
+  }
+  if (classId == 2) {
+    return AgentType::TrafficLightGreen;
+  }
   std::cerr << "Unexpected class id: " << classId << std::endl;
   std::terminate();
 }
@@ -51,7 +57,7 @@ AgentDetector::AgentDetector() : detector_(createDetector()) {}
 std::vector<Agent> AgentDetector::detectAgents(const cv::Mat& frame) {
   auto objects = detector_.runDetection(frame, nullptr);
 
-  constexpr float kMinScore = 0.75f;
+  constexpr float kMinScore = 0.6f;
   std::vector<Agent> agents;
   for (const auto& obj : objects) {
     if (obj.score >= kMinScore) {

@@ -150,7 +150,7 @@ void ObjectDetector::annotateImage(cv::Mat& image,
     const int xmin = object.location.left * image.cols;
     const int ymax = object.location.bottom * image.rows;
     const int xmax = object.location.right * image.cols;
-    if (object.score > 0.75f) {
+    if (object.score > 0.6f) {
       cv::rectangle(image, cv::Rect(xmin, ymin, xmax - xmin, ymax - ymin),
                     cv::Scalar(0, 0, 255), 1);
       cv::putText(image, object.className, cv::Point(xmin, ymin - 5),

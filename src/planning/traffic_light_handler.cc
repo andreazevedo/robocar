@@ -30,7 +30,7 @@ bool TrafficLightHandler::shouldStop(const perception::Obstacles& obstacles) {
   redLight_.update(redLight);
   if (redLight_.isTracking()) {
     // We are tracking a red light. Stop when it's close enough.
-    constexpr float kDistanceToStop = 15.0f;
+    constexpr float kDistanceToStop = 25.0f;
     float projectedDistance = redLight_.getProjectedDistance();
     std::cout << "Projected distance: " << projectedDistance << std::endl;
     if (projectedDistance < kDistanceToStop) {
