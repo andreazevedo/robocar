@@ -2,11 +2,15 @@
 
 A self-driving car built with raspberry pi and C++ 17.
 
+[![Robocar on a running track](https://j.gifs.com/PjJ4J1.gif)](https://youtu.be/WzhDoDy-ALc)
+
 ## Videos
 
-Below are some other videos of the robocar working in practice
- - [Robocar autonomously driving in a complex track](https://youtu.be/XUoTdrrCPvY)
- - [Robocar on a running track](https://youtu.be/WzhDoDy-ALc)
+Below are some other videos of the Robocar in action
+ - [Autonomously driving in a complex track](https://youtu.be/XUoTdrrCPvY)
+ - [On a running track](https://youtu.be/WzhDoDy-ALc)
+ - [Handling a stop sign](https://youtu.be/b2XHkebQ2pA)
+ - [Handling semaphore](https://youtu.be/MXNcnwItGes)
 
 ## Hardware
 
