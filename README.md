@@ -2,7 +2,7 @@
 
 A self-driving car built with raspberry pi and C++ 17.
 
-[![Robocar on a running track](https://j.gifs.com/PjJ4J1.gif)](https://youtu.be/WzhDoDy-ALc)
+[![Robocar on a running track](https://github.com/andreazevedo/media/raw/main/robocar-track-gif.gif)](https://youtu.be/WzhDoDy-ALc)
 
 ## Videos
 
